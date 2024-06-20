@@ -56,8 +56,8 @@ public class InputManager : MonoBehaviour
     public bool ClickTriggered {get; private set;} 
 
     //References, Instancing and Flags
-    private static DataManager dataManager;
     public static InputManager Instance {get; private set;}
+    private DataManager dataManager;
 
     //Singleton pattern below
     private void Awake()
@@ -71,7 +71,8 @@ public class InputManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        // Instance of Data Manager
+    
+    // Instance of Data Manager
     dataManager = DataManager.Instance;
 
     exitAction = playerControls.FindActionMap(actionMapName).FindAction(exit);
