@@ -8,10 +8,12 @@ using UnityEngine;
 public class BuildManager : MonoBehaviour
 {
     public static BuildManager Instance {get; private set;}
+    private DataManager dataManager;
     private InputManager inputManager;
-    // Start is called before the first frame update
-    private void Awake()
-    {       
+
+    // Start -- before games starts, but after Awake
+    private void Start()
+    {    
     // Singleton of BuildManager
         if (Instance == null)
         {
@@ -22,8 +24,16 @@ public class BuildManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    //Instance of Data Manager
+    dataManager = DataManager.Instance;       
     // Instance of Input Manager
     inputManager = InputManager.Instance;
+
+        if (dataManager.debugOnInfo == true)
+        {
+            Debug.Log("Build Manager Start Complete");
+        }
+
     }
 
     // Update is called once per frame

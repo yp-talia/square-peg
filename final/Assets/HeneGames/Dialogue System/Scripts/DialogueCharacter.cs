@@ -10,4 +10,6 @@ namespace HeneGames.DialogueSystem
         public string characterName;
     }
 
+
+
 }

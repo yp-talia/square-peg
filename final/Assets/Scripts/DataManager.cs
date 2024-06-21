@@ -10,7 +10,7 @@ public class DataManager : MonoBehaviour
 
     [Header ("Gameplay Lists")]
 
-    public string[] possiblePlayerNames = { "Amanda", "Brian", "Christopher", "Danielle", "Eleanor", "Frank", "Gabrielle", "Heather", "Ian", "Jessica", "Kevin", "Lauren", "Matthew", "Nicholas", "Olivia", "Patrick", "Quentin", "Rachel", "Sarah", "Timothy", "Ursula", "Victoria", "William", "Xavier", "Yvonne", "Zachary" };
+    [SerializeField] private string[] possiblePlayerNames = { "Amanda", "Brian", "Christopher", "Danielle", "Eleanor", "Frank", "Gabrielle", "Heather", "Ian", "Jessica", "Kevin", "Lauren", "Matthew", "Nicholas", "Olivia", "Patrick", "Quentin", "Rachel", "Sarah", "Timothy", "Ursula", "Victoria", "William", "Xavier", "Yvonne", "Zachary" };
 
     public string playerName = "????";
 
@@ -27,10 +27,16 @@ public class DataManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            Debug.LogWarning("Data Manager Destroyed");
+        }
+
+        if (debugOnInfo == true)
+        {
+            Debug.Log("Data Manager Awake Complete");
         }
     }
     private void Update()
     {
-
+        
     }
 }

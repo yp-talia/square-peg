@@ -19,6 +19,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -44,16 +45,21 @@ public class InputManager : MonoBehaviour
     [SerializeField] private string pause = "Pause";
     [SerializeField] private string fullscreen = "Fullscreen";
     [SerializeField] private string click = "Click";
+    [SerializeField] private string point = "Point";
 
+    // Updating this to handle multiple ActionNameMaps for an Action Name
     private InputAction exitAction;
     private InputAction pauseAction;
     private InputAction fullscreenAction;
     private InputAction clickAction;
+    private InputAction pointAction;
 
+    //FUTURE ME: Remember bool for buttons, Vector2 for directions
     public bool ExitTriggered {get; private set;} 
     public bool PauseTriggered {get; private set;} 
     public bool FullscreenTriggered {get; private set;} 
     public bool ClickTriggered {get; private set;} 
+    public Vector2 PointInput {get; private set;} 
 
     //References, Instancing and Flags
     public static InputManager Instance {get; private set;}
@@ -74,14 +80,20 @@ public class InputManager : MonoBehaviour
     
     // Instance of Data Manager
     dataManager = DataManager.Instance;
-
+    
     exitAction = playerControls.FindActionMap(actionMapName).FindAction(exit);
     pauseAction = playerControls.FindActionMap(actionMapName).FindAction(pause);
     fullscreenAction = playerControls.FindActionMap(actionMapName).FindAction(fullscreen);
     clickAction = playerControls.FindActionMap(actionMapName).FindAction(click);
+    pointAction = playerControls.FindActionMap(actionMapName).FindAction(point);
     
     // We need to register that the above actions happened, so...
     RegisterInputActions();
+
+        if (dataManager.debugOnInfo == true)
+        {
+            Debug.Log("Input Manager Awake Complete");
+        }
     }
 
     //Registering the various states for an input action and some light debug
@@ -98,22 +110,39 @@ public class InputManager : MonoBehaviour
 
         clickAction.performed += context => ClickTriggered = true;
         clickAction.canceled += context => ClickTriggered = false;
+        // Only applies to the UI action map
+        if (actionMapName == "UI")
+        {
+            pointAction.performed += context => PointInput = context.ReadValue<Vector2>();
+            pointAction.canceled += context => PointInput = Vector2.zero;
+        }
     }
 
     // Input System is event based, so we need to Enable/Disable these
+    // I am refactoring this, because how i'd have to write it otherwise...
+    // is just silly... see helper function below
     void OnEnable()
     {
         exitAction.Enable();
         pauseAction.Enable();
         fullscreenAction.Enable();
         clickAction.Enable();
+                // Only applies to the UI action map
+        if (actionMapName == "UI")
+            {
+            pointAction.Enable();
+            }
     }
-        void OnDisable()
+    void OnDisable()
     {
         exitAction.Disable();
         pauseAction.Disable();
         fullscreenAction.Disable();
         clickAction.Disable();
+        if (actionMapName == "UI")
+            {
+            pointAction.Disable();
+            }
     }
 
     void Update()
@@ -135,6 +164,10 @@ public class InputManager : MonoBehaviour
             if (ClickTriggered == true)
             {
                 Debug.Log("Click performed");
+            }
+            if (PointInput != Vector2.zero)
+            {
+                Debug.Log("Point performed at:" + PointInput);
             }
         }
     }

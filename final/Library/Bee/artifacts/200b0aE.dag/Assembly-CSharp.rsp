@@ -386,9 +386,11 @@
 "Assets/HeneGames/Dialogue System/Scripts/Movement2D.cs"
 "Assets/HeneGames/Dialogue System/Scripts/SimpleNavAgentAnimation.cs"
 "Assets/Scripts/BuildManager.cs"
+"Assets/Scripts/CursorManager.cs"
 "Assets/Scripts/DataManager.cs"
+"Assets/Scripts/DialogueScriptWrapper.cs"
 "Assets/Scripts/InputManager.cs"
-"Assets/Scripts/SceneManager.cs"
+"Assets/Scripts/SceneManagerCustom.cs"
 "Assets/TutorialInfo/Scripts/Readme.cs"
 -langversion:9.0
 /deterministic
