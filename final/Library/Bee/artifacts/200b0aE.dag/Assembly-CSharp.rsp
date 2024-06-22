@@ -391,6 +391,7 @@
 "Assets/Scripts/DialogueScriptWrapper.cs"
 "Assets/Scripts/InputManager.cs"
 "Assets/Scripts/SceneManagerCustom.cs"
+"Assets/Scripts/TimerHelper.cs"
 "Assets/TutorialInfo/Scripts/Readme.cs"
 -langversion:9.0
 /deterministic

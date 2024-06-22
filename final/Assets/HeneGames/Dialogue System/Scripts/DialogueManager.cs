@@ -1,5 +1,5 @@
-        // Modifying script to use Input System Rather than Events/Input
-        // Will make all changes with CHANGED or ADDITION
+        // Modifying script to enable Dialogues which are not user advancable
+        // Add changes/additions are marked with NOTE:
 
 using System.Collections;
 using System.Collections.Generic;
@@ -40,25 +40,45 @@ namespace HeneGames.DialogueSystem
             {
                 coolDownTimer -= Time.deltaTime;
             }
-
-            //Start dialogue by input
-            if (Input.GetKeyDown(DialogueUI.instance.actionInput) && dialogueTrigger != null && !dialogueIsOn)
+            // NOTE: Adding automatic advancement to next sentence if timer expires and...
+            // Dialogue is on and we've disabled Input
+            else if (dialogueIsOn && sentences[currentSentence].disableInput == true)
             {
-                //Trigger event inside DialogueTrigger component
-                if (dialogueTrigger != null)
+                NextSentence(out bool lastSentence);
+            }
+            //NOTE: Trying to protect against intermittent errors when pause/unpausing scene in Editor
+            if (DialogueUI.instance != null && sentences.Count > 0)
+            {
+                //Start dialogue by input
+                if (Input.GetKeyDown(DialogueUI.instance.actionInput) && dialogueTrigger != null && !dialogueIsOn)
                 {
-                    dialogueTrigger.startDialogueEvent.Invoke();
+                    //Trigger event inside DialogueTrigger component
+                    if (dialogueTrigger != null)
+                    {
+                        dialogueTrigger.startDialogueEvent.Invoke();
+                    }
+
+                    startDialogueEvent.Invoke();
+
+                    //If component found start dialogue
+                    DialogueUI.instance.StartDialogue(this);
+
+                    //Hide interaction UI
+                    DialogueUI.instance.ShowInteractionUI(false);
+
+                    dialogueIsOn = true;
                 }
-
-                startDialogueEvent.Invoke();
-
-                //If component found start dialogue
-                DialogueUI.instance.StartDialogue(this);
-
-                //Hide interaction UI
-                DialogueUI.instance.ShowInteractionUI(false);
-
-                dialogueIsOn = true;
+                // NOTE: the sibling of the else if above, allow manual advance if disable input is false
+                if (dialogueIsOn && sentences[currentSentence].disableInput == false && Input.GetKeyDown(DialogueUI.instance.actionInput))
+                {
+                    NextSentence(out bool lastSentence);
+                }
+            }
+            else
+            //NOTE: Adding in Debug logging, not integrating with Data Manager as I hope to not touch this file again.
+            // FUTURE ME: do integrate with DataManager.debugOnWarn if we see this comment!
+            {
+                Debug.LogWarning("Either there are no sentences, or DialogueUI.instance is/has become unassigned");
             }
         }
 
@@ -192,7 +212,7 @@ namespace HeneGames.DialogueSystem
         }
 
         public void NextSentence(out bool lastSentence)
-        {
+        {   
             //The next sentence cannot be changed immediately after starting
             if (coolDownTimer > 0f)
             {
@@ -294,17 +314,31 @@ namespace HeneGames.DialogueSystem
             }
         }
 
-        public int CurrentSentenceLenght()
+        public int CurrentSentenceLenght() //sic?
         {
             if(sentences.Count <= 0)
                 return 0;
 
             return sentences[currentSentence].sentence.Length;
         }
+
+        //NOTE: Function to publicly check if DisabledInput is true on the current sentence
+        public bool CurrentSentenceDisabledInput()
+        {
+            if(sentences != null && sentences.Count > 0 && currentSentence < sentences.Count)
+            {
+                return sentences[currentSentence].disableInput;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
+    
 
     [System.Serializable]
-    public class NPC_Centence
+    public class NPC_Centence //sic?
     {
         [Header("------------------------------------------------------------")]
 
@@ -314,6 +348,13 @@ namespace HeneGames.DialogueSystem
         public string sentence;
 
         public float skipDelayTime = 0.5f;
+
+        // Toggle to force sentence to advance at the end of skipDelayTime...
+        // and ignore user input (e.g. when additively loading a scene and also)...
+        // wanting the character to interject at the same time
+        //NOTE: Added tooltip and disableInput bool
+        [Tooltip("If enabled, then Player Interaction disabled and automatically advances to next Sentence after Skip Delay Time")]
+        public bool disableInput = false; 
 
         public AudioClip sentenceSound;
 

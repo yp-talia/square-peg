@@ -41,7 +41,12 @@ namespace HeneGames.DialogueSystem
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI messageText;
         [SerializeField] private GameObject dialogueWindow;
+        //NOTE: Getting the InputText GameObject so TMP can be disabled if disableInput = true
+        private TMPro.TMP_Text dialogueWindowInputText;
         [SerializeField] private GameObject interactionUI;
+        
+        //NOTE: Getting the InputText GameObject so TMP can be disabled if disableInput = true
+        private TMPro.TMP_Text interactionUIInputText;
 
         [Header("Settings")]
         [SerializeField] private bool animateText = true;
@@ -61,6 +66,25 @@ namespace HeneGames.DialogueSystem
             }
 
             InputUpdate();
+
+            //NOTE: Hiding Input text if disableInput = true
+            //NOTE: If currentDialogueManager exists, get inputText, then decide whether to disable/enable
+            if (currentDialogueManager != null)
+            {
+                dialogueWindowInputText = dialogueWindow.transform.Find("Input text").GetComponent<TMP_Text>();
+                interactionUIInputText = interactionUI.transform.Find("Input text").GetComponent<TMP_Text>();
+                if (currentDialogueManager.CurrentSentenceDisabledInput() == true)
+                {
+                    dialogueWindowInputText.enabled = false;
+                    interactionUIInputText.enabled = false;
+                }
+                else
+                {
+                    dialogueWindowInputText.enabled = true;
+                    interactionUIInputText.enabled = true;
+                }
+
+            }
         }
 
         public virtual void InputUpdate()
