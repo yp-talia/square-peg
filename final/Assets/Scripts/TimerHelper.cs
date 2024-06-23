@@ -111,6 +111,27 @@ public class TimerHelper : MonoBehaviour
         }
     }
 
+    // Update text if there is one and debug
+    public void ForceTimerEnd()
+    {
+    if (countDown == true)
+        {
+            timeRemaining = 0;
+        }
+    else
+        {
+            timeRemaining = timerDuration;
+        }
+        
+        if (dataManager.debugOnInfo == true)
+        {
+            Debug.Log("ForceTimerEnd Called: Timer Forced to end");
+        }
+        
+    StopAllCoroutines();
+    CountdownEnd();
+    }
+
     // When the timer ends, outbound on End Event, play end sound, debug
     void CountdownEnd()
     {
