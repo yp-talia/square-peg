@@ -1,7 +1,10 @@
-// I'm going to modify the behaviour/values of the Dialogue system here
+// 240621_I'm going to modify the behaviour/values of the Dialogue system here
 // This file is going to be smothered in comments ...
 // Because I'm getting my head around how ScriptableObjects work...
 // and it all feels very counter-intuitive. Sorry FUTURE ME
+
+// 240623_Looping back to this file, I've made the player name data stored...
+// in it's own ScriptableObject, so refactoring
 
 using System.Collections;
 using System.Collections.Generic;
@@ -14,18 +17,24 @@ public class DialogueScriptWrapper : MonoBehaviour
 // Defining Variables
     //Name of character field
     private string prevCharacterName;
+    private string curCharacterName;
 
-    // Instance of Data Manager which is were I'm storing player Data.
-    // In hind-sight, this probably should be a scriptable object...
-    // Let's see how today goes, I might replace it ... but I'm also running out of time (21/06/24)
+    // Instance on Data Manager for logging
     private DataManager dataManager;
+
+    [SerializeField] private TextFieldOptions characterNameStore;
+
     // On Start not Awake as want to run this after everything has loaded
     private void Start()
     {
         // Instance of Data Manager
         dataManager = DataManager.Instance;
 
-        // Calling Update Character Name with the Player's Character
+        //Pulling out the character name field
+        curCharacterName = characterNameStore.selection;
+
+        // Calling Update Character Name with the Player's Character (which will be used to...
+        // lookup the Dialogue Character ScriptableObject)
         UpdateCharacterName("PlayerCharacter");
 
         if (dataManager.debugOnInfo == true)
@@ -49,10 +58,10 @@ public class DialogueScriptWrapper : MonoBehaviour
         if (character != null)
         {
             // Checking to see whether the name has changed
-            if (dataManager.playerName != prevCharacterName)
+            if (curCharacterName != prevCharacterName)
             {
                 //If it has changed, then update character name
-                character.characterName = dataManager.playerName;
+                character.characterName = curCharacterName;
                 prevCharacterName = character.characterName;
                 // If we've got debug logging on, write message to console
                 if (dataManager.debugOnInfo == true)

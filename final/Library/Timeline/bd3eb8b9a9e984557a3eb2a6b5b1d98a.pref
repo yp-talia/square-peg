@@ -23,5 +23,5 @@ MonoBehaviour:
     end: 0
   m_Keys: []
   m_Vals: []
-  m_Version: 0
+  m_Version: 1
   deprecated_timeAreaPlayRange: {x: 0, y: 0}

@@ -8,11 +8,13 @@ public class DataManager : MonoBehaviour
     public bool debugOnWarn = false;
     public bool debugOnInfo = true;
 
-    [Header ("Gameplay Lists")]
+    // [Header ("Gameplay Lists")]
+    
+    //Old Player Name options moving to ScriptableObject
+    // [SerializeField] private string[] possiblePlayerNames = { "Amanda", "Brian", "Christopher", "Danielle", "Eleanor", "Frank", "Gabrielle", "Heather", "Ian", "Jessica", "Kevin", "Lauren", "Matthew", "Nicholas", "Olivia", "Patrick", "Quentin", "Rachel", "Sarah", "Timothy", "Ursula", "Victoria", "William", "Xavier", "Yvonne", "Zachary" };
 
-    [SerializeField] private string[] possiblePlayerNames = { "Amanda", "Brian", "Christopher", "Danielle", "Eleanor", "Frank", "Gabrielle", "Heather", "Ian", "Jessica", "Kevin", "Lauren", "Matthew", "Nicholas", "Olivia", "Patrick", "Quentin", "Rachel", "Sarah", "Timothy", "Ursula", "Victoria", "William", "Xavier", "Yvonne", "Zachary" };
-
-    public string playerName = "????";
+    //Old Player Name before moving to ScriptableObject
+    // public string playerName = "????";
 
     public static DataManager Instance {get; private set;}
     
@@ -35,8 +37,5 @@ public class DataManager : MonoBehaviour
             Debug.Log("Data Manager Awake Complete");
         }
     }
-    private void Update()
-    {
-        
-    }
+    // TODO: Write public setter function for private data
 }
