@@ -31,8 +31,11 @@ public class ScrollViewWriterReader : MonoBehaviour
     //This the panel/rectangular GameObject I mention up top
     private Transform grandParent;
 
-    // [Header ("ScrollView and Content Behaviors")]
-    
+    private enum BehaviorTypes{Submit, Select}; // This relates to behaviorTypes below.
+    [Header ("Behaviors")]
+
+    [Tooltip("1. Select: Highlights the text with selectTextColor, writes data out to the selected Source,  calls onSelect Event \n 2. Submit: Writes data out to the selected Source,  calls onSelect Event")]
+    [SerializeField] private BehaviorTypes behaviorTypes;
     // [Tooltip("When the player scrolls, and that scroll is on a element in the ScrollView but not the ScrollView itself. Should it scroll?")]
     // [SerializeField] private bool passScrollEventsToParent = true;
     
@@ -48,6 +51,7 @@ public class ScrollViewWriterReader : MonoBehaviour
     //FUTURE ME: For some reason every time I tried to set a default in code it errored - leave to editor.
     [SerializeField] private Color32 defaultTextColor;
     [SerializeField] private Color32 hoverTextColor;
+    [SerializeField] private Color32 selectTextColor;
     [SerializeField] private int fontSize = 220;
     
     [Header ("Sources")]
@@ -56,9 +60,8 @@ public class ScrollViewWriterReader : MonoBehaviour
     [SerializeField] private TextFieldOptions scrollViewDataStore;
 
     [Header ("Outbound Events")]
-    
-    [Tooltip("Select where the data is stored to display in this ScrollView")]
     [SerializeField] public UnityEvent OnSelectEvent = new UnityEvent();
+    [SerializeField] public UnityEvent OnSubmitEvent = new UnityEvent();
 
     // Place to store the possible text options for the childScrollViewText
     private string[] options;
@@ -214,17 +217,36 @@ public class ScrollViewWriterReader : MonoBehaviour
     
     //When the user finishes a click, call WriteTextOut to send data...
     // and stop the timer
+
+    // Also : Enums and switch cases :) https://www.w3schools.com/cs/cs_enums.php
     public void HandlePointerClick(GameObject target, PointerEventData data)
     {
-        // if (isDragging == false)
-        // {
-            TMP_Text innerText = target.GetComponentInChildren<TMP_Text>();
-            WriteTextOut(innerText.text);
-            OnSelectEvent.Invoke();
-            if (dataManager.debugOnInfo == true)
-            {
-                Debug.Log("Pointer Clicked: " + target.name);
-            }
+        TMP_Text innerText = target.GetComponentInChildren<TMP_Text>();
+
+        switch(behaviorTypes)
+        {
+            case BehaviorTypes.Select:
+                innerText.color = selectTextColor;
+                WriteTextOut(innerText.text);
+                
+                OnSelectEvent.Invoke(); 
+
+                if (dataManager.debugOnInfo == true)
+                {
+                    Debug.Log("Pointer Clicked: " + target.name + "Selected text" + innerText);
+                }
+                break;
+            case BehaviorTypes.Submit:
+                WriteTextOut(innerText.text);
+                
+                OnSubmitEvent.Invoke(); 
+
+                if (dataManager.debugOnInfo == true)
+                {
+                    Debug.Log("Pointer Clicked: " + target.name + "Submitted text" + innerText);
+                }
+                break;
+        }
         // }   
     }
 

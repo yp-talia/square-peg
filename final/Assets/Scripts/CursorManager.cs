@@ -15,8 +15,8 @@ public class CursorManager : MonoBehaviour
         Cursor.SetCursor(cursorTexture, cursorsHotSpot, cursorMode);
     }
 
-    // void OnMouseExit()
-    // {
-        
-    // }
+    public void Hide()
+    {
+        Cursor.visible = false;
+    }
 }
