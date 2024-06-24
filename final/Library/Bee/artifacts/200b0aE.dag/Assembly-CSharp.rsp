@@ -394,6 +394,7 @@
 "Assets/Scripts/InputManager.cs"
 "Assets/Scripts/SceneManagerCustom.cs"
 "Assets/Scripts/ScriptableObjects/TextFieldOptions.cs"
+"Assets/Scripts/ScrollViewDragOverride.cs"
 "Assets/Scripts/ScrollViewWriterReader.cs"
 "Assets/Scripts/TimerHelper.cs"
 "Assets/TutorialInfo/Scripts/Readme.cs"

@@ -519,6 +519,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7693124097328229153, guid: f6f568a298cb04e8ba4a735cd098966b,
         type: 3}
+      propertyPath: fontSize
+      value: 220
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693124097328229153, guid: f6f568a298cb04e8ba4a735cd098966b,
+        type: 3}
       propertyPath: hoverTextColor.rgba
       value: 3691974419
       objectReference: {fileID: 0}

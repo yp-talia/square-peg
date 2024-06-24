@@ -22,16 +22,28 @@
     //5.1 call private function
     //5.2 include logging
 
+// Pointer Events implemented: 
+// -- Enter/Exit UI Element with Binding
+// -- Click on, Start click, End click (Down/Up)
+// -- Starting Drag, Dragging, Finished Drag
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
+public class EventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
+                            IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, 
+                            IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private System.Action<GameObject, PointerEventData> onPointerEnter;
     private System.Action<GameObject, PointerEventData> onPointerExit;
+    private System.Action<GameObject, PointerEventData> onPointerDown;
     private System.Action<GameObject, PointerEventData> onPointerUp;
+    private System.Action<GameObject, PointerEventData> onPointerClick;
+    private System.Action<GameObject, PointerEventData> onBeginDrag;
+    private System.Action<GameObject, PointerEventData> onDrag;
+    private System.Action<GameObject, PointerEventData> onEndDrag;
     private DataManager dataManager;
 
     void Start()
@@ -43,11 +55,30 @@ public class EventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             Debug.Log("Event Handler Start Complete");
         }
     }
-    public void BindEvents(System.Action<GameObject, PointerEventData> onPointerEnter, System.Action<GameObject, PointerEventData> onPointerExit, System.Action<GameObject, PointerEventData> onPointerUp)
+    // I'm setting all of these to null by default (see Optional Arguments) so I don't have to...
+    // call all of the events unless I need to. Partially to tidy up the code, mainly to fix a bug where...
+    // clickable GameObjects are not scrollable and visa versa 
+    // https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/named-and-optional-arguments
+
+    // FUTURE ME: I can't believe that Unity would implement a system where click events block drag events...
+    // but I've already spent most of a day on this, and nothing else appears to work
+    public void BindEvents(System.Action<GameObject, PointerEventData> onPointerEnter = null, 
+                            System.Action<GameObject, PointerEventData> onPointerExit = null, 
+                            System.Action<GameObject, PointerEventData> onPointerDown = null, 
+                            System.Action<GameObject, PointerEventData> onPointerUp = null, 
+                            System.Action<GameObject, PointerEventData> onPointerClick = null, 
+                            System.Action<GameObject, PointerEventData> onBeginDrag = null, 
+                            System.Action<GameObject, PointerEventData> onDrag = null, 
+                            System.Action<GameObject, PointerEventData> onEndDrag = null)
     {
         this.onPointerEnter = onPointerEnter;
         this.onPointerExit = onPointerExit;
+        this.onPointerDown = onPointerDown;
+        this.onPointerClick = onPointerClick;
         this.onPointerUp = onPointerUp;
+        this.onBeginDrag = onBeginDrag;
+        this.onDrag = onDrag;
+        this.onEndDrag = onEndDrag;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -67,12 +98,53 @@ public class EventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
     }
 
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        onPointerDown?.Invoke(gameObject, eventData);
+        if (dataManager.debugOnInfo == true)
+        {
+            Debug.Log("Pointer Down: " + gameObject.name);
+        }
+    }
+
     public void OnPointerUp(PointerEventData eventData)
     {
         onPointerUp?.Invoke(gameObject, eventData);
         if (dataManager.debugOnInfo == true)
         {
             Debug.Log("Pointer Up: " + gameObject.name);
+        }
+    }
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        onPointerClick?.Invoke(gameObject, eventData);
+        if (dataManager.debugOnInfo == true)
+        {
+            Debug.Log("Pointer Click: " + gameObject.name);
+        }
+    }
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        onBeginDrag?.Invoke(gameObject, eventData);
+        if (dataManager.debugOnInfo == true)
+        {
+            Debug.Log("Pointer Began Drag: " + gameObject.name);
+        }
+    }
+    public void OnDrag(PointerEventData eventData)
+    {
+        onDrag?.Invoke(gameObject, eventData);
+        if (dataManager.debugOnInfo == true)
+        {
+            Debug.Log("Pointer Dragging: " + gameObject.name);
+        }
+    }
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        onEndDrag?.Invoke(gameObject, eventData);
+        if (dataManager.debugOnInfo == true)
+        {
+            Debug.Log("Pointer Ended Drag: " + gameObject.name);
         }
     }
 } 

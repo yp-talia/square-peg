@@ -70,6 +70,7 @@
     <Compile Include="Assets/Scripts/DialogueScriptWrapper.cs" />
     <Compile Include="Assets/Scripts/EventHandler.cs" />
     <Compile Include="Assets/HeneGames/Dialogue System/Scripts/FollowTarget.cs" />
+    <Compile Include="Assets/Scripts/ScrollViewDragOverride.cs" />
     <Compile Include="Assets/Scripts/TimerHelper.cs" />
     <Compile Include="Assets/HeneGames/Dialogue System/Scripts/DialogueTrigger.cs" />
     <Compile Include="Assets/Scripts/ScriptableObjects/TextFieldOptions.cs" />

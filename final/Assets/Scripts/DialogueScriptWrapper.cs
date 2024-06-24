@@ -14,6 +14,8 @@ using HeneGames.DialogueSystem;
 
 public class DialogueScriptWrapper : MonoBehaviour
 {
+
+    public static DialogueScriptWrapper Instance;
 // Defining Variables
     //Name of character field
     private string prevCharacterName;
@@ -27,6 +29,17 @@ public class DialogueScriptWrapper : MonoBehaviour
     // On Start not Awake as want to run this after everything has loaded
     private void Start()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            Debug.LogWarning("Dialogue Script Wrapper Destroyed");
+        }
+
         // Instance of Data Manager
         dataManager = DataManager.Instance;
 
@@ -35,7 +48,7 @@ public class DialogueScriptWrapper : MonoBehaviour
 
         // Calling Update Character Name with the Player's Character (which will be used to...
         // lookup the Dialogue Character ScriptableObject)
-        UpdateCharacterName("PlayerCharacter");
+        UpdateCharacterName("PlayerCharacter", curCharacterName);
 
         if (dataManager.debugOnInfo == true)
         {
@@ -45,10 +58,12 @@ public class DialogueScriptWrapper : MonoBehaviour
 
     //Function that I can call whenever the data on a character's name changes...
     // I've written this to work on Start as well as be called elsewhere whenever a name updates
-    void UpdateCharacterName(string characterName)
+    public void UpdateCharacterName(string characterType, string characterName )
     {
+        // Making the received characterName the currCharacterName if it came from external source
+        curCharacterName = characterName;
         // Variable for constructed path to the character's file
-        string characterPath = "Dialogue/" + characterName;
+        string characterPath = "Dialogue/" + characterType;
         // In order to be editable at runtime, a file needs to be Resources -- https://docs.unity3d.com/ScriptReference/Resources.Load.html
         // 
         DialogueCharacter character = Resources.Load<DialogueCharacter>(characterPath);

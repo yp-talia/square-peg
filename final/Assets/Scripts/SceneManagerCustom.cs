@@ -30,7 +30,7 @@ public class SceneManagerCustom : MonoBehaviour
             SceneManager.LoadScene(sceneName);
             if (dataManager.debugOnInfo == true)
             {
-                Debug.Log("Loaded: " + sceneName + "Total Scenes Active: " + SceneManager.loadedSceneCount);
+                Debug.Log("Loaded: " + sceneName);
             }
     }
     public void LoadSceneAdditive(string sceneName)
@@ -38,15 +38,17 @@ public class SceneManagerCustom : MonoBehaviour
             SceneManager.LoadScene(sceneName,  LoadSceneMode.Additive);
             if (dataManager.debugOnInfo == true)
             {
-                Debug.Log("Loaded: " + sceneName + " Additively. Total Scenes Active: " + SceneManager.loadedSceneCount);
+                Debug.Log("Loaded: " + sceneName);
             }
     }
     public void UnloadSceneAdditive(string sceneName)
     {
             SceneManager.UnloadSceneAsync(sceneName);
+            // Quick fix for cursor visibility bug
+            Cursor.visible = false;
             if (dataManager.debugOnInfo == true)
             {
-                Debug.Log("Unloaded: " + sceneName + " Async. Total Scenes Active: " + SceneManager.loadedSceneCount);
+                Debug.Log("Unloaded: " + sceneName);
             }
     }
 }
