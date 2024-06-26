@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using UnityEditor;
 
 public class ScrollViewWriterReader : MonoBehaviour
 {
@@ -180,10 +181,6 @@ public class ScrollViewWriterReader : MonoBehaviour
         }
     }
 
-    // TODO: 2406026 : There is a bug here which means that when the player selects an option,
-    // the temp color is only applied when the player returns to onEnter on the option.
-    // I know how to fix it, but it'll have to wait until I see how we progress with the 
-    // rest of the game
     public void HandlePointerEnter(GameObject target, PointerEventData data)
     {
         TMP_Text innerText = target.GetComponentInChildren<TMP_Text>();
@@ -264,7 +261,7 @@ public class ScrollViewWriterReader : MonoBehaviour
                         }
                     }
                     
-                    if (allRawImages != null) // These need to be kept as two independent ifs
+                    if (allRawImages != null) // These needs to be kept as two independent ifs
                     {
                         foreach (RawImage allRawImage in allRawImages)
                         {
@@ -277,7 +274,7 @@ public class ScrollViewWriterReader : MonoBehaviour
                             selectedOption = target;
                             rawImage.rectTransform.localScale = localScaleChange;
                             rawImage.color = selectImageColor;
-                            // WriteOut(innerText.text); -- Replace this line
+                            WriteOutRawImage(rawImage);
                             if (dataManager.debugOnInfo == true)
                             {
                                 Debug.Log("Pointer Clicked: " + target.name + "\nSelected image " + rawImage.name);
@@ -316,7 +313,7 @@ public class ScrollViewWriterReader : MonoBehaviour
         }
     }
 
-// TODO: Replace with three functions?
+// TODO: Replace with two functions
     public void WriteOutText(string outputText)
     {
         if (scrollViewDataStore is TextFieldOptions textFieldOptions)
@@ -330,25 +327,33 @@ public class ScrollViewWriterReader : MonoBehaviour
             Debug.Log("Selected: " + textFieldOptions.selection);
         }
     }
+// else if (scrollViewDataStore is RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions)
+    public void WriteOutRawImage(RawImage outputRawImage)
+    {
+        RenderTexture renderTexture;
+        renderTexture = (RenderTexture)outputRawImage.texture;
 
-    //     if (scrollViewDataStore is TextFieldOptions textFieldOptions)
-    //     {
-    //         textFieldOptions.selection = outputText;
-    //     }
-    //     else if (scrollViewDataStore is RenderTextureToMaterialFieldOptions renderTextureToMaterialFieldOptions)
-    //     {
-    //         // Define logic
-    //     }
-    //     else if (scrollViewDataStore is RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions)
-    //     {
-    //         // Define logic
-    //     }
+    if (scrollViewDataStore is RenderTextureToMaterialFieldOptions renderTextureToMaterialFieldOptions)
+        {
+            for (int i = 0; i < renderTextureToMaterialFieldOptions.options.Length; i++)
+            {
+                if (renderTextureToMaterialFieldOptions.options[i] == renderTexture)
+                {
+                    renderTextureToMaterialFieldOptions.selection = renderTextureToMaterialFieldOptions.pairedOptions[i];
+                    // if (RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions.name == "PlayerSkin")
+                }
+            }
+        }
+    else if (scrollViewDataStore is RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions)
+        {
+            for (int i = 0; i < renderTextureToGameObjectFieldOptions.options.Length; i++)
+            {
+                if (renderTextureToGameObjectFieldOptions.options[i] == renderTexture)
+                {
+                    renderTextureToGameObjectFieldOptions.selection = renderTextureToGameObjectFieldOptions.pairedOptions[i];
 
-    //     if (scrollViewDataStore.name == "Player Name")
-    //     {
-    //         dialogueScriptWrapper.UpdateCharacterName("PlayerCharacter", outputText);
-    //     }
-
-    //     Debug.Log("Selected: " + outputText);
-    // }
+                }
+            }
+        }
+    }
 }

@@ -4564,7 +4564,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4279176979
   selectFontSizePercentage: 0.9
-  defaultFontSize: 110
+  defaultFontSize: 105
   defaultImageColor:
     serializedVersion: 2
     rgba: 2197815295
