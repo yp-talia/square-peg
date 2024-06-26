@@ -1,14 +1,3 @@
-//The GameObjects this script creates needs a parent object to write to...
-//I suggest placing it on a panel or similar rectangular GameObject to make...
-//positioning easier
-
-// This class is quite dense, so here's the summary:
-    // Calling: ScrollViewWriter will create a scrollview with the content provided
-    // If you use EventHandler and eventHandler.BindEvents (example below) you can send/receive events based on Inputs
-        // EventHandler eventHandler = childScrollViewText.AddComponent<EventHandler>();
-        // eventHandler.BindEvents(HandlePointerEnter, HandlePointerExit, HandlePointerUp);
-    // There is an event which can be send when the user selects an option
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,11 +5,14 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
-using System;
 
 public class ScrollViewWriterReader : MonoBehaviour
 {
-    [Header ("Content Selector")]
+    private enum BehaviorTypes { Submit, Select }; // This relates to behaviorTypes below.
+
+    [Header("Content Selector")]
+    [Tooltip("Select the ScriptableObject containing the data for the ScrollView")]
+    [SerializeField] private ScriptableObject scrollViewDataStore;
 
     [Tooltip("Select the prefab for the parent ScrollView Type to create")]
     [SerializeField] private GameObject scrollViewType;
@@ -28,89 +20,63 @@ public class ScrollViewWriterReader : MonoBehaviour
     [Tooltip("Select the prefab for the child Content Item to create")]
     [SerializeField] private GameObject contentItemType;
 
-    //This the panel/rectangular GameObject I mention up top
+    private GameObject selectedOption; // A flag visual treatment on selected/clicked option
+
     private Transform grandParent;
 
-    private enum BehaviorTypes{Submit, Select}; // This relates to behaviorTypes below.
-    [Header ("Behaviors")]
-
-    [Tooltip("1. Select: Highlights the text with selectTextColor, writes data out to the selected Source,  calls onSelect Event \n 2. Submit: Writes data out to the selected Source,  calls onSelect Event")]
+    [Header("Behaviors")]
+    [Tooltip("1. Select: Highlights the text with selectTextColor, writes data out to the selected Source, calls onSelect Event \n 2. Submit: Writes data out to the selected Source, calls onSelect Event")]
     [SerializeField] private BehaviorTypes behaviorTypes;
-    // [Tooltip("When the player scrolls, and that scroll is on a element in the ScrollView but not the ScrollView itself. Should it scroll?")]
-    // [SerializeField] private bool passScrollEventsToParent = true;
-    
-    // private ScrollRect highestScrollableArea;
-    // private bool isDragging = false;
-    
-    [Header ("Parent Position Offsets")]
+
+    [Header("Parent Position Offsets")]
     [SerializeField] private float scrollViewPositionX = 0;
     [SerializeField] private float scrollViewPositionY = 0;
-    [SerializeField] private float scrollViewPositionZ = 0;
 
-    [Header ("Text Styling")]
-    //FUTURE ME: For some reason every time I tried to set a default in code it errored - leave to editor.
-    [SerializeField] private Color32 defaultTextColor;
-    [SerializeField] private Color32 hoverTextColor;
-    [SerializeField] private Color32 selectTextColor;
-    [SerializeField] private int fontSize = 220;
+    [Header("Parent Relative Scaling")]
+    [SerializeField] private float scrollViewScaleX = 1f;
+    [SerializeField] private float scrollViewScaleY = 1f;
+    [SerializeField] private float scrollViewScaleZ = 1f;
+
+    [Header("Text Styling")]
+    [SerializeField] private Color32 defaultTextColor= new Color32(19,15,15,130);
+    [SerializeField] private Color32 hoverTextColor= new Color32(19,15,15,190);
+    [SerializeField] private Color32 selectTextColor= new Color32(19,15,15,255);
+    private Color32 tempTextColor;
+
+    [Tooltip("The percentage increase/decrease in font size when selected (1 = 100%, 0.5 = 50%, 1.5 = 150% etc)")]
+    [SerializeField] private float selectFontSizePercentage = 0.9f;
+    [SerializeField] private int defaultFontSize = 220;
+
+    [Header("Image Styling")]
+    [SerializeField] private Color32 defaultImageColor = new Color32(255,255,255,155);
+    [SerializeField] private Color32 hoverImageColor = new Color32(255,255,255,205);
+    [SerializeField] private Color32 selectImageColor = new Color32(255,255,255,255);
+    [SerializeField] private float selectImageSizePercentage = 1.1f;
     
-    [Header ("Sources")]
+    private Vector3 localScaleChange;
+    private Color32 tempImageColor;
 
-    [Tooltip("Select where the data is stored to display in this ScrollView")]
-    [SerializeField] private TextFieldOptions scrollViewDataStore;
-
-    [Header ("Outbound Events")]
+    [Header("Outbound Events")]
     [SerializeField] public UnityEvent OnSelectEvent = new UnityEvent();
     [SerializeField] public UnityEvent OnSubmitEvent = new UnityEvent();
 
-    // Place to store the possible text options for the childScrollViewText
-    private string[] options;
-    
-    // Place to store the selected options from the childScrollViewText
-    private string selection;
-
-    //Data Manager for logging
     private DataManager dataManager;
     private DialogueScriptWrapper dialogueScriptWrapper;
 
-    // This was going to be used to detect which option the player has visible...
-    // I might come back to it, but dropping for now
-
-    // private int scrollViewCurrentSelected = -1;
-
+    // ! There is a bug which occurs when this script is in the first scene to load.
+        // ! If that becomes a requirement, you'll need to fix it.
     void Start()
     {
-    
-    // The main GameObject that everything writes under is the grandParent (because I forgot and had to find...
-    // it above parent)... also Null checking
-    grandParent = transform;
+        grandParent = transform;
 
         if (grandParent == null && dataManager.debugOnWarn == true)
         {
             Debug.LogWarning("Grandparent Object is null on Scroll View Writer Reader");
         }
-        
-    // Instance of Data Manager
-    dataManager = DataManager.Instance;
 
-    dialogueScriptWrapper = DialogueScriptWrapper.Instance;
-
-    // Getting the data from the ScriptableObject... and null checking
-        if (scrollViewDataStore != null)
-        {
-            options = scrollViewDataStore.textOptions;
-            selection = scrollViewDataStore.selection;
-        }
-        else
-        {
-            if (dataManager.debugOnWarn == true)
-            {
-                Debug.LogWarning("Scriptable Object is null on Scroll View Writer Reader");
-            }
-        }
-
-    // Call function to create ScrollView and write content
-    ScrollViewWriter();
+        dataManager = DataManager.Instance;
+        dialogueScriptWrapper = DialogueScriptWrapper.Instance;
+        ScrollViewWriter();
 
         if (dataManager.debugOnInfo == true)
         {
@@ -118,191 +84,271 @@ public class ScrollViewWriterReader : MonoBehaviour
         }
     }
 
-    // !!!!!!! READ THIS POST AND REMEMBER WHAT A PAIN THE CODE BELOW WAS BEFORE EDITING
-    // !!!!!!! AND IF YOU DO EDIT, COMMIT BEFOREHAND AND TEST FREQUENTLY
-    // !!!!!!! https://forum.unity.com/threads/child-objects-blocking-scrollrect-from-scrolling.311555/ !!!!!!!
-
     void ScrollViewWriter()
     {
-        //Create parent from prebab - scrollViewType in GrandParent GameObject, and check for null
         GameObject parentScrollView = Instantiate(scrollViewType, grandParent);
-            if (parentScrollView == null)
-            {
-                Debug.LogError("parentScrollView could not be Found");
-                return;
-            }
-        // Getting the Scroll Rect of the GrandParent to pass scroll events up to.
-        ScrollRect highestScrollableArea = parentScrollView.GetComponent<ScrollRect>();
-            if (dataManager.debugOnInfo == true)
-            {
-                Debug.Log("highestScrollableArea:" + highestScrollableArea.name);
-            }
-            if (highestScrollableArea == null)
-            {
-                Debug.LogError("highestScrollableArea in parentScrollView could not be Found");
-                return;
-            }
+        RectTransform parentRectTransform = parentScrollView.GetComponent<RectTransform>();
+        parentRectTransform.anchoredPosition = new Vector2(scrollViewPositionX, scrollViewPositionY);
+        parentScrollView.transform.localScale = new Vector3(scrollViewScaleX, scrollViewScaleY, scrollViewScaleZ);
 
-        //Find the Content Object in the parent and check for null
-        Transform contentArea = parentScrollView.transform.Find("Viewport/Content");
-            if (contentArea == null)
-            {
-                Debug.LogError("parentScrollView contentArea could not be Found");
-                return;
-            }
-        // Now Create a new Text Object in the Content Object, 
-        // update the text in that Object with the current option from options
-        // repeat for the length of the array of options
-        foreach (string option in options)
+        if (parentScrollView == null)
         {
-            GameObject childScrollViewText = Instantiate(contentItemType, contentArea);
-            childScrollViewText.transform.localPosition = new Vector3(scrollViewPositionX, scrollViewPositionY, scrollViewPositionZ);
-
-            //Adding event handler (outbound), Binding Event Handler Handling (inbound)
-            EventHandler eventHandler = childScrollViewText.AddComponent<EventHandler>();
-            // I've modified this method to have optional arguments (i.e. they args with defaults)
-            // use this structure onPointerClick: HandlePointerClick, 
-            // for these arguments
-            eventHandler.BindEvents(onPointerEnter : HandlePointerEnter, 
-                                    onPointerExit : HandlePointerExit,
-                                    onPointerClick: HandlePointerClick);
-                                //Commented out when moving ScrollViewDragOverride to its own class
-                                    // onBeginDrag : HandleBeginDrag,
-                                    // onDrag : HandleDrag,
-                                    // onEndDrag: HandleEndDrag);
-                                    //Unused Handlers
-                                    // HandlePointerDown, HandlePointerUp
-            // Adding more event handlers to overwrite from text to parent
-            ScrollViewDragOverride scrollViewDragOverride = childScrollViewText.AddComponent<ScrollViewDragOverride>();
-            scrollViewDragOverride.scrollRect = highestScrollableArea;
-
-            //Writing the option to the text within childScrollViewText
-            TMP_Text innerText = childScrollViewText.GetComponentInChildren<TextMeshProUGUI>();
-            innerText.fontSize = fontSize;
-            innerText.text = option;
-
-            // Logging out the value created and total created if Info Logging enabled
-            if (dataManager.debugOnInfo == true)
-            {
-                Debug.Log("Created parentScrollView.childScrollViewText.innerText.text, with value" + innerText.text + "/n Total Created:" + contentArea.transform.childCount);
-            }
+            Debug.LogError("parentScrollView could not be Found");
+            return;
+        }
+        grandParent = transform;
+        ScrollRect highestScrollableArea = parentScrollView.GetComponent<ScrollRect>();
+        if (highestScrollableArea == null)
+        {
+            Debug.LogError("highestScrollableArea in parentScrollView could not be Found");
+            return;
         }
 
+        Transform contentArea = parentScrollView.transform.Find("Viewport/Content");
+        if (contentArea == null)
+        {
+            Debug.LogError("parentScrollView contentArea could not be Found");
+            return;
+        }
+        
+        // If we're handling an array of strings to a single string
+        if (scrollViewDataStore is TextFieldOptions textFieldOptions)
+        {
+            CreateTextOptions(textFieldOptions.options, contentArea, highestScrollableArea);
+        }
+        // If we're handling an array of Render Textures to a single Material
+        else if (scrollViewDataStore is RenderTextureToMaterialFieldOptions renderTextureToMaterialFieldOptions)
+        {
+            CreateRenderTextureOptions(renderTextureToMaterialFieldOptions.options, contentArea, highestScrollableArea);
+        }
+        // If we're handling an array of Render Textures to a single GameObject
+        else if (scrollViewDataStore is RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions)
+        {
+            CreateRenderTextureOptions(renderTextureToGameObjectFieldOptions.options, contentArea, highestScrollableArea);
+        }
+        else if (scrollViewDataStore == null)
+        {
+            Debug.LogError("ScriptableObject is not assigned in editor");
+        }
+        else
+        {
+            Debug.LogError("Other ScriptableObject type than expected");
+        }
     }
 
-    // These function can do a lot more than it is currently, as they have access to the...
-    // entire GameObject sending the event and PointerEventData
-    //https://docs.unity3d.com/Packages/com.unity.ugui@3.0/api/UnityEngine.EventSystems.PointerEventData.html
+    void CreateTextOptions(string[] options, Transform content, ScrollRect scrollRect)
+    {
+        foreach (string option in options)
+        {
+            GameObject childScrollViewText = Instantiate(contentItemType, content);
+            EventHandler eventHandler = childScrollViewText.AddComponent<EventHandler>();
+            eventHandler.BindEvents(onPointerEnter: HandlePointerEnter, onPointerExit: HandlePointerExit, onPointerClick: HandlePointerClick);
 
-    // When the player's mouse enters childScrollViewText, change colour to hoverColor
+            ScrollViewDragOverride scrollViewDragOverride = childScrollViewText.AddComponent<ScrollViewDragOverride>();
+            scrollViewDragOverride.scrollRect = scrollRect;
+
+            TMP_Text innerText = childScrollViewText.GetComponentInChildren<TextMeshProUGUI>();
+            innerText.fontSize = defaultFontSize;
+            innerText.text = option;
+
+            if (dataManager.debugOnInfo == true)
+            {
+                Debug.Log("Created parentScrollView.childScrollViewText.innerText.text, with value" + innerText.text + "\n Total Created:" + content.transform.childCount);
+            }
+        }
+    }
+
+    void CreateRenderTextureOptions(RenderTexture[] options, Transform content, ScrollRect scrollRect)
+    {
+        foreach (RenderTexture option in options)
+        {
+            GameObject childScrollViewRawImage = Instantiate(contentItemType, content);
+            EventHandler eventHandler = childScrollViewRawImage.AddComponent<EventHandler>();
+            eventHandler.BindEvents(onPointerEnter: HandlePointerEnter, onPointerExit: HandlePointerExit, onPointerClick: HandlePointerClick);
+
+            ScrollViewDragOverride scrollViewDragOverride = childScrollViewRawImage.AddComponent<ScrollViewDragOverride>();
+            scrollViewDragOverride.scrollRect = scrollRect;
+
+            RawImage rawImage = childScrollViewRawImage.GetComponentInChildren<RawImage>();
+            rawImage.color = defaultImageColor;
+            rawImage.texture = option;
+
+            if (dataManager.debugOnInfo == true)
+            {
+                Debug.Log("Created parentScrollView.childScrollViewRawImage.texture.name, with value" + rawImage.name + "\n Total Created:" + content.transform.childCount);
+            }
+        }
+    }
+
+    // TODO: 2406026 : There is a bug here which means that when the player selects an option,
+    // the temp color is only applied when the player returns to onEnter on the option.
+    // I know how to fix it, but it'll have to wait until I see how we progress with the 
+    // rest of the game
     public void HandlePointerEnter(GameObject target, PointerEventData data)
     {
         TMP_Text innerText = target.GetComponentInChildren<TMP_Text>();
-        innerText.color = hoverTextColor;
+        RawImage rawImage = target.GetComponentInChildren<RawImage>();
+        if (innerText != null)
+        {
+            if (target != selectedOption)
+            {
+                tempTextColor = innerText.color;
+                innerText.color = hoverTextColor;
+            }
+        }
+        else if (rawImage != null)
+        {
+            if (target != selectedOption)
+            {
+                tempImageColor = rawImage.color;
+                rawImage.color = hoverImageColor;
+            }
+        }
         if (dataManager.debugOnInfo == true)
         {
             Debug.Log("Pointer Enters: " + target.name);
         }
     }
-        // When the player's mouse exits childScrollViewText, change colour to default
+
     public void HandlePointerExit(GameObject target, PointerEventData data)
     {
         TMP_Text innerText = target.GetComponentInChildren<TMP_Text>();
-        innerText.color = defaultTextColor;
+        RawImage rawImage = target.GetComponentInChildren<RawImage>();
+        if (innerText != null && target != selectedOption)
+        {
+            innerText.color = tempTextColor;
+        }
+        else if (rawImage != null && target != selectedOption)
+        {
+            rawImage.color = tempImageColor;
+        }
         if (dataManager.debugOnInfo == true)
         {
             Debug.Log("Pointer Exit: " + target.name);
         }
     }
-    
-    //When the user finishes a click, call WriteTextOut to send data...
-    // and stop the timer
 
-    // Also : Enums and switch cases :) https://www.w3schools.com/cs/cs_enums.php
     public void HandlePointerClick(GameObject target, PointerEventData data)
     {
         TMP_Text innerText = target.GetComponentInChildren<TMP_Text>();
+        TMP_Text[] allInnerTexts = target.transform.parent.GetComponentsInChildren<TMP_Text>();
+        RawImage rawImage = target.GetComponentInChildren<RawImage>();
+        RawImage[] allRawImages = target.transform.parent.GetComponentsInChildren<RawImage>();
+        localScaleChange = new Vector3(selectImageSizePercentage,selectImageSizePercentage,selectImageSizePercentage);
 
-        switch(behaviorTypes)
+        switch (behaviorTypes)
         {
             case BehaviorTypes.Select:
-                innerText.color = selectTextColor;
-                WriteTextOut(innerText.text);
-                
-                OnSelectEvent.Invoke(); 
-
-                if (dataManager.debugOnInfo == true)
                 {
-                    Debug.Log("Pointer Clicked: " + target.name + "Selected text" + innerText);
+                    if (allInnerTexts != null)
+                    {
+                        foreach (TMP_Text allInnerText in allInnerTexts)
+                        {
+                            allInnerText.fontStyle &= ~FontStyles.Underline;
+                            allInnerText.fontStyle &= ~FontStyles.Bold;
+                            allInnerText.color = defaultTextColor;
+                            allInnerText.fontSize = defaultFontSize;
+                        }
+
+                        if (innerText != null)
+                        {
+                            selectedOption = target;
+                            innerText.color = selectTextColor;
+                            innerText.fontStyle = FontStyles.Underline | FontStyles.Bold;
+                            innerText.fontSize = Mathf.RoundToInt(defaultFontSize * selectFontSizePercentage);
+                            WriteOutText(innerText.text);
+                            if (dataManager.debugOnInfo == true)
+                            {
+                                Debug.Log("Pointer Clicked: " + target.name + " Selected text " + innerText.text);
+                            }
+                        }
+                    }
+                    
+                    if (allRawImages != null) // These need to be kept as two independent ifs
+                    {
+                        foreach (RawImage allRawImage in allRawImages)
+                        {
+                            allRawImage.color = defaultImageColor;
+                            allRawImage.rectTransform.localScale = Vector3.one;
+                        }
+
+                        if (rawImage != null)
+                        {
+                            selectedOption = target;
+                            rawImage.rectTransform.localScale = localScaleChange;
+                            rawImage.color = selectImageColor;
+                            // WriteOut(innerText.text); -- Replace this line
+                            if (dataManager.debugOnInfo == true)
+                            {
+                                Debug.Log("Pointer Clicked: " + target.name + "\nSelected image " + rawImage.name);
+                            }
+                        }
+                    }
+                    OnSelectEvent.Invoke();
+
+                    break;
                 }
-                break;
+
             case BehaviorTypes.Submit:
-                WriteTextOut(innerText.text);
-                
-                OnSubmitEvent.Invoke(); 
-
-                if (dataManager.debugOnInfo == true)
+            {
+                if (innerText != null)
                 {
-                    Debug.Log("Pointer Clicked: " + target.name + "Submitted text" + innerText);
+                    WriteOutText(innerText.text);
+
+                    if (dataManager.debugOnInfo == true)
+                    {
+                        Debug.Log("Pointer Clicked: " + target.name + "\nSubmitted text " + innerText.text);
+                    }
                 }
+                
+                if (rawImage != null) //replace this section
+                {
+                    // Define logic
+                    if (dataManager.debugOnInfo == true)
+                    {
+                        Debug.Log("Pointer Clicked: " + target.name + "\nSubmitted image " + rawImage.name);
+                    }
+                }
+                OnSubmitEvent.Invoke();
+
                 break;
+            }
         }
-        // }   
     }
 
-    // Unused currently... but required for HandlePointerUp
-    // public void HandlePointerDown(GameObject target, PointerEventData data)
-    // {}
-    // Unused currently... but required to differentiate between click and drag
-    // public void HandlePointerUp(GameObject target, PointerEventData data)
-    // {}
-    // public void HandleBeginDrag(GameObject target, PointerEventData data)
-    // {
-    //     if (passScrollEventsToParent == true && highestScrollableArea != null)
-    //     {
-    //         highestScrollableArea.OnBeginDrag(data);
-    //         isDragging = true;
-    //         if (dataManager.debugOnInfo == true)
-    //         {
-    //             Debug.Log("Pointer Began Drag: " + target.name);
-    //         }
-    //     }
-    // }
-    // public void HandleDrag(GameObject target, PointerEventData data)
-    // {
-    //     if (passScrollEventsToParent == true && highestScrollableArea != null)
-    //     {
-    //         highestScrollableArea.OnDrag(data);
-    //         if (dataManager.debugOnInfo == true)
-    //         {
-    //             Debug.Log("Pointer Dragging: " + target.name);
-    //         }
-    //     }
-    // }
-    // public void HandleEndDrag(GameObject target, PointerEventData data)
-    // {
-    //     if (passScrollEventsToParent == true && highestScrollableArea != null)
-    //     {
-    //         highestScrollableArea.OnEndDrag(data);
-    //         isDragging = false;
-    //         if (dataManager.debugOnInfo == true)
-    //         {
-    //             Debug.Log("Pointer Ended Drag: " + target.name);
-    //         }
-    //     }
-    // }
-
-    public void WriteTextOut(string outputText)
+// TODO: Replace with three functions?
+    public void WriteOutText(string outputText)
     {
-        // A possible feature extension automatically select the currently visible...
-        //option if none have been selected.. but leaving this for now.
-        scrollViewDataStore.selection = outputText;
-
-        if (scrollViewDataStore.name == "Player Name")
+        if (scrollViewDataStore is TextFieldOptions textFieldOptions)
         {
-            dialogueScriptWrapper.UpdateCharacterName("PlayerCharacter", scrollViewDataStore.selection);
-        } 
-        Debug.Log("Selected: " + scrollViewDataStore.selection);
+            textFieldOptions.selection = outputText;
+
+            if (textFieldOptions.name == "Player Name")
+            {
+                dialogueScriptWrapper.UpdateCharacterName("PlayerCharacter", textFieldOptions.selection);
+            } 
+            Debug.Log("Selected: " + textFieldOptions.selection);
+        }
     }
-    
+
+    //     if (scrollViewDataStore is TextFieldOptions textFieldOptions)
+    //     {
+    //         textFieldOptions.selection = outputText;
+    //     }
+    //     else if (scrollViewDataStore is RenderTextureToMaterialFieldOptions renderTextureToMaterialFieldOptions)
+    //     {
+    //         // Define logic
+    //     }
+    //     else if (scrollViewDataStore is RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions)
+    //     {
+    //         // Define logic
+    //     }
+
+    //     if (scrollViewDataStore.name == "Player Name")
+    //     {
+    //         dialogueScriptWrapper.UpdateCharacterName("PlayerCharacter", outputText);
+    //     }
+
+    //     Debug.Log("Selected: " + outputText);
+    // }
 }

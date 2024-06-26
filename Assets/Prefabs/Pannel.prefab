@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1981796116487732412}
   - component: {fileID: 2931657616576502148}
   - component: {fileID: 5334938444198579678}
-  - component: {fileID: 7693124097328229153}
   m_Layer: 5
   m_Name: Pannel
   m_TagString: Untagged
@@ -127,24 +126,3 @@ PolygonCollider2D:
       - {x: 0.58778536, y: -0.80901694}
       - {x: 0.9510565, y: 0.30901712}
   m_UseDelaunayMesh: 0
---- !u!114 &7693124097328229153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6364120663014749939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3e1048b0f6da48eca0388afd99282c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scrollViewType: {fileID: 5901628554596918856, guid: b4b8162c8cf32485f8634207612b1e1d,
-    type: 3}
-  contentItemType: {fileID: 2694976399756182293, guid: 1aa4d3a56056a4e27968d8d32c3bbb33,
-    type: 3}
-  scrollViewPositionX: 0
-  scrollViewPositionY: 0
-  scrollViewPositionZ: 0
-  scrollViewDataStore: {fileID: 11400000, guid: a2e18ce01f204464fa19a697594280a1,
-    type: 2}

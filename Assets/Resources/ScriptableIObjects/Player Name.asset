@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05bd3cc0f8a87481381632dcd91efa24, type: 3}
   m_Name: Player Name
   m_EditorClassIdentifier: 
-  textOptions:
+  options:
   - Amanda
   - Brian
   - Christopher

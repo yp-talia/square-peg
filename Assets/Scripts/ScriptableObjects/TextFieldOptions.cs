@@ -5,6 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Text Field Options")]
 public class TextFieldOptions : ScriptableObject
 {
-    public string[] textOptions;
+    public string[] options;
     public string selection;
 }

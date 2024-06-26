@@ -12,6 +12,7 @@ public class CursorManager : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = true;
         Cursor.SetCursor(cursorTexture, cursorsHotSpot, cursorMode);
     }
 
