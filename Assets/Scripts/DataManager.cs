@@ -5,16 +5,16 @@ using UnityEngine;
 public class DataManager : MonoBehaviour
 {
     [Header ("Debug Levels")]    
-    public bool debugOnWarn = false;
+    public bool debugOnWarn = true;
     public bool debugOnInfo = true;
+    public bool debugOnInfoPriority = true; // Adding this in because debugOnInfo is really noisy
 
-    // [Header ("Gameplay Lists")]
-    
-    //Old Player Name options moving to ScriptableObject
-    // [SerializeField] private string[] possiblePlayerNames = { "Amanda", "Brian", "Christopher", "Danielle", "Eleanor", "Frank", "Gabrielle", "Heather", "Ian", "Jessica", "Kevin", "Lauren", "Matthew", "Nicholas", "Olivia", "Patrick", "Quentin", "Rachel", "Sarah", "Timothy", "Ursula", "Victoria", "William", "Xavier", "Yvonne", "Zachary" };
+    [Header ("Gameplay Constants")]
 
-    //Old Player Name before moving to ScriptableObject
-    // public string playerName = "????";
+    public int positionsGainableMin = 1;
+    public int positionsGainableMax = 20;
+    public int positionsLosableMin = 5;
+    public int positionsLosableMax = 15;
 
     public static DataManager Instance {get; private set;}
     

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using UnityEditor;
+
 
 public class ScrollViewWriterReader : MonoBehaviour
 {
@@ -28,6 +30,10 @@ public class ScrollViewWriterReader : MonoBehaviour
     [Header("Behaviors")]
     [Tooltip("1. Select: Highlights the text with selectTextColor, writes data out to the selected Source, calls onSelect Event \n 2. Submit: Writes data out to the selected Source, calls onSelect Event")]
     [SerializeField] private BehaviorTypes behaviorTypes;
+
+    [SerializeField] private string[] successMatchCriteria;
+
+    private bool successful = false;
 
     [Header("Parent Position Offsets")]
     [SerializeField] private float scrollViewPositionX = 0;
@@ -60,6 +66,8 @@ public class ScrollViewWriterReader : MonoBehaviour
     [Header("Outbound Events")]
     [SerializeField] public UnityEvent OnSelectEvent = new UnityEvent();
     [SerializeField] public UnityEvent OnSubmitEvent = new UnityEvent();
+    [SerializeField] public UnityEvent OnSuccessEvent = new UnityEvent();
+    [SerializeField] public UnityEvent OnFailureEvent = new UnityEvent();
 
     private DataManager dataManager;
     private DialogueScriptWrapper dialogueScriptWrapper;
@@ -68,6 +76,7 @@ public class ScrollViewWriterReader : MonoBehaviour
         // ! If that becomes a requirement, you'll need to fix it.
     void Start()
     {
+        dataManager = DataManager.Instance;
         grandParent = transform;
 
         if (grandParent == null && dataManager.debugOnWarn == true)
@@ -75,7 +84,6 @@ public class ScrollViewWriterReader : MonoBehaviour
             Debug.LogWarning("Grandparent Object is null on Scroll View Writer Reader");
         }
 
-        dataManager = DataManager.Instance;
         dialogueScriptWrapper = DialogueScriptWrapper.Instance;
         ScrollViewWriter();
 
@@ -126,6 +134,11 @@ public class ScrollViewWriterReader : MonoBehaviour
         else if (scrollViewDataStore is RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions)
         {
             CreateRenderTextureOptions(renderTextureToGameObjectFieldOptions.options, contentArea, highestScrollableArea);
+        }
+                // I should probably rename this, they're not Textures they're Sprites. But oh well...
+        else if (scrollViewDataStore is TextureTagged textureTagged)
+        {
+            CreateTextureOptions(textureTagged.options, contentArea, highestScrollableArea);
         }
         else if (scrollViewDataStore == null)
         {
@@ -181,10 +194,34 @@ public class ScrollViewWriterReader : MonoBehaviour
         }
     }
 
+    void CreateTextureOptions(Sprite[] options, Transform content, ScrollRect scrollRect)
+    {
+        foreach (Sprite option in options)
+        {
+            GameObject childScrollViewProcessedImage = Instantiate(contentItemType, content);
+            EventHandler eventHandler = childScrollViewProcessedImage.AddComponent<EventHandler>();
+            eventHandler.BindEvents(onPointerEnter: HandlePointerEnter, onPointerExit: HandlePointerExit, onPointerClick: HandlePointerClick);
+
+            ScrollViewDragOverride scrollViewDragOverride = childScrollViewProcessedImage.AddComponent<ScrollViewDragOverride>();
+            scrollViewDragOverride.scrollRect = scrollRect;
+
+            Image processedImage = childScrollViewProcessedImage.GetComponentInChildren<Image>();
+            processedImage.color = defaultImageColor;
+            processedImage.sprite = option;
+
+            if (dataManager.debugOnInfo == true)
+            {
+                Debug.Log("Created parentScrollView.childScrollViewRawImage.texture.name, with value" + processedImage.name + "\n Total Created:" + content.transform.childCount);
+            }
+        }
+    }
+
+    //TODO: Updated HandlePointerEnter, HandlePointerExit
     public void HandlePointerEnter(GameObject target, PointerEventData data)
     {
         TMP_Text innerText = target.GetComponentInChildren<TMP_Text>();
         RawImage rawImage = target.GetComponentInChildren<RawImage>();
+        Image processedImage = target.GetComponentInChildren<Image>();
         if (innerText != null)
         {
             if (target != selectedOption)
@@ -201,6 +238,14 @@ public class ScrollViewWriterReader : MonoBehaviour
                 rawImage.color = hoverImageColor;
             }
         }
+        else if (processedImage != null)
+        {
+            if (target != selectedOption)
+            {
+                tempImageColor = processedImage.color;
+                processedImage.color = hoverImageColor;
+            }
+        }
         if (dataManager.debugOnInfo == true)
         {
             Debug.Log("Pointer Enters: " + target.name);
@@ -211,6 +256,7 @@ public class ScrollViewWriterReader : MonoBehaviour
     {
         TMP_Text innerText = target.GetComponentInChildren<TMP_Text>();
         RawImage rawImage = target.GetComponentInChildren<RawImage>();
+        Image processedImage = target.GetComponentInChildren<Image>();
         if (innerText != null && target != selectedOption)
         {
             innerText.color = tempTextColor;
@@ -218,6 +264,10 @@ public class ScrollViewWriterReader : MonoBehaviour
         else if (rawImage != null && target != selectedOption)
         {
             rawImage.color = tempImageColor;
+        }
+        else if (processedImage != null && target != selectedOption)
+        {
+            processedImage.color = tempImageColor;
         }
         if (dataManager.debugOnInfo == true)
         {
@@ -231,60 +281,86 @@ public class ScrollViewWriterReader : MonoBehaviour
         TMP_Text[] allInnerTexts = target.transform.parent.GetComponentsInChildren<TMP_Text>();
         RawImage rawImage = target.GetComponentInChildren<RawImage>();
         RawImage[] allRawImages = target.transform.parent.GetComponentsInChildren<RawImage>();
+        Image processedImage = target.GetComponentInChildren<Image>();
+        Image[] allProcessedImages = target.transform.parent.GetComponentsInChildren<Image>();
         localScaleChange = new Vector3(selectImageSizePercentage,selectImageSizePercentage,selectImageSizePercentage);
 
         switch (behaviorTypes)
         {
             case BehaviorTypes.Select:
+            {
+                if (allInnerTexts != null)
                 {
-                    if (allInnerTexts != null)
+                    foreach (TMP_Text allInnerText in allInnerTexts)
                     {
-                        foreach (TMP_Text allInnerText in allInnerTexts)
-                        {
-                            allInnerText.fontStyle &= ~FontStyles.Underline;
-                            allInnerText.fontStyle &= ~FontStyles.Bold;
-                            allInnerText.color = defaultTextColor;
-                            allInnerText.fontSize = defaultFontSize;
-                        }
+                        allInnerText.fontStyle &= ~FontStyles.Underline;
+                        allInnerText.fontStyle &= ~FontStyles.Bold;
+                        allInnerText.color = defaultTextColor;
+                        allInnerText.fontSize = defaultFontSize;
+                    }
 
-                        if (innerText != null)
+                    if (innerText != null)
+                    {
+                        successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
+                        selectedOption = target;
+                        innerText.color = selectTextColor;
+                        innerText.fontStyle = FontStyles.Underline | FontStyles.Bold;
+                        innerText.fontSize = Mathf.RoundToInt(defaultFontSize * selectFontSizePercentage);
+                        WriteOutText(innerText.text);
+                        if (dataManager.debugOnInfo == true)
                         {
-                            selectedOption = target;
-                            innerText.color = selectTextColor;
-                            innerText.fontStyle = FontStyles.Underline | FontStyles.Bold;
-                            innerText.fontSize = Mathf.RoundToInt(defaultFontSize * selectFontSizePercentage);
-                            WriteOutText(innerText.text);
-                            if (dataManager.debugOnInfo == true)
-                            {
-                                Debug.Log("Pointer Clicked: " + target.name + " Selected text " + innerText.text);
-                            }
+                            Debug.Log("Pointer Clicked: " + target.name + " Selected text " + innerText.text);
                         }
                     }
-                    
-                    if (allRawImages != null) // These needs to be kept as two independent ifs
-                    {
-                        foreach (RawImage allRawImage in allRawImages)
-                        {
-                            allRawImage.color = defaultImageColor;
-                            allRawImage.rectTransform.localScale = Vector3.one;
-                        }
-
-                        if (rawImage != null)
-                        {
-                            selectedOption = target;
-                            rawImage.rectTransform.localScale = localScaleChange;
-                            rawImage.color = selectImageColor;
-                            WriteOutRawImage(rawImage);
-                            if (dataManager.debugOnInfo == true)
-                            {
-                                Debug.Log("Pointer Clicked: " + target.name + "\nSelected image " + rawImage.name);
-                            }
-                        }
-                    }
-                    OnSelectEvent.Invoke();
-
-                    break;
                 }
+                
+                if (allRawImages != null) // These needs to be kept as independent ifs
+                {
+                    foreach (RawImage allRawImage in allRawImages)
+                    {
+                        allRawImage.color = defaultImageColor;
+                        allRawImage.rectTransform.localScale = Vector3.one;
+                    }
+
+                    if (rawImage != null)
+                    {
+                        successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
+                        selectedOption = target;
+                        rawImage.rectTransform.localScale = localScaleChange;
+                        rawImage.color = selectImageColor;
+                        WriteOutRawImage(rawImage);
+                        if (dataManager.debugOnInfo == true)
+                        {
+                            Debug.Log("Pointer Clicked: " + target.name + "\nSelected image " + rawImage.name);
+                        }
+                    }
+                }
+                if (allProcessedImages != null) // These needs to be kept as independent ifs
+                {
+                    foreach (Image allProcessedImage in allProcessedImages)
+                    {
+                        allProcessedImage.color = defaultImageColor;
+                        allProcessedImage.rectTransform.localScale = Vector3.one;
+                    }
+
+                    if (processedImage != null)
+                    {
+                        successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
+                        selectedOption = target;
+                        processedImage.rectTransform.localScale = localScaleChange;
+                        processedImage.color = selectImageColor;
+                        WriteOutImage(processedImage);
+                        
+                        if (dataManager.debugOnInfo == true)
+                        {
+                            Debug.Log("Pointer Clicked: " + target.name + "\nSelected image " + processedImage.name);
+                        }
+                    }
+                }
+                OnSelectEvent.Invoke();
+
+                break;
+            }
 
             case BehaviorTypes.Submit:
             {
@@ -306,14 +382,21 @@ public class ScrollViewWriterReader : MonoBehaviour
                         Debug.Log("Pointer Clicked: " + target.name + "\nSubmitted image " + rawImage.name);
                     }
                 }
+
+                if (processedImage != null) //replace this section
+                {
+                    // Define logic
+                    if (dataManager.debugOnInfo == true)
+                    {
+                        Debug.Log("Pointer Clicked: " + target.name + "\nSubmitted image " + processedImage.name);
+                    }
+                }
                 OnSubmitEvent.Invoke();
 
                 break;
             }
         }
     }
-
-// TODO: Replace with two functions
     public void WriteOutText(string outputText)
     {
         if (scrollViewDataStore is TextFieldOptions textFieldOptions)
@@ -325,9 +408,12 @@ public class ScrollViewWriterReader : MonoBehaviour
                 dialogueScriptWrapper.UpdateCharacterName("PlayerCharacter", textFieldOptions.selection);
             } 
             Debug.Log("Selected: " + textFieldOptions.selection);
+            if (successMatchCriteria != null)
+            {
+                SuccessText(textFieldOptions.selection);
+            }
         }
     }
-// else if (scrollViewDataStore is RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions)
     public void WriteOutRawImage(RawImage outputRawImage)
     {
         RenderTexture renderTexture;
@@ -340,7 +426,6 @@ public class ScrollViewWriterReader : MonoBehaviour
                 if (renderTextureToMaterialFieldOptions.options[i] == renderTexture)
                 {
                     renderTextureToMaterialFieldOptions.selection = renderTextureToMaterialFieldOptions.pairedOptions[i];
-                    // if (RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions.name == "PlayerSkin")
                 }
             }
         }
@@ -355,5 +440,145 @@ public class ScrollViewWriterReader : MonoBehaviour
                 }
             }
         }
+    }
+    public void WriteOutImage(Image processedImage)
+    {
+        Sprite sprite;
+        sprite = (Sprite)processedImage.sprite;
+
+        if (scrollViewDataStore is TextureTagged textureTagged)
+        {
+            for (int i = 0; i < textureTagged.options.Length; i++)
+            {
+                if (textureTagged.options[i] == sprite)
+                {
+                    textureTagged.selection = textureTagged.options[i];
+                    textureTagged.selectionName = textureTagged.options[i].name;
+                    textureTagged.selectionTagName = textureTagged.pairedOptionTag[i].ToString();
+                    if (successMatchCriteria != null)
+                    {
+                        SuccessProcessedImage(textureTagged.selection, textureTagged.selectionName, textureTagged.selectionTagName);
+                    }
+                }
+            }
+        }
+    }
+    
+    // Single Function to clear associated ScriptableOption.selection field
+    public void ResetSelection()
+    {
+        // If we're handling an array of strings to a single string
+        if (scrollViewDataStore is TextFieldOptions textFieldOptions)
+        {
+            textFieldOptions.selection = null;
+        }
+        // If we're handling an array of Render Textures to a single Material
+        else if (scrollViewDataStore is RenderTextureToMaterialFieldOptions renderTextureToMaterialFieldOptions)
+        {
+            renderTextureToMaterialFieldOptions.selection = null;
+        }
+        // If we're handling an array of Render Textures to a single GameObject
+        else if (scrollViewDataStore is RenderTextureToGameObjectFieldOptions renderTextureToGameObjectFieldOptions)
+        {
+            renderTextureToGameObjectFieldOptions.selection = null;
+        }
+                // I should probably rename this, they're not Textures they're Sprites. But oh well...
+        else if (scrollViewDataStore is TextureTagged textureTagged)
+        {
+            textureTagged.selection = null;
+            textureTagged.selectionName = null;
+            textureTagged.selectionTagName = null;
+        }
+        else if (scrollViewDataStore == null)
+        {
+            if (dataManager.debugOnWarn == true)
+            {
+            Debug.LogWarning("ResetSelection - ScriptableObject is not assigned in editor");
+            }
+        }
+        else
+        {
+            if (dataManager.debugOnWarn == true)
+            {
+            Debug.LogWarning("ResetSelection - Other ScriptableObject type than expected");
+            }
+        }
+    }
+
+    bool SuccessText(String inputText)
+    {
+        if (successful == false)
+        {
+            foreach (String successMatchCriterion in successMatchCriteria)
+            {
+                if (inputText == successMatchCriterion)
+                {
+                    if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                    {
+                        Debug.Log("Matched" + successMatchCriterion + " on " + inputText);
+                    }
+                    OnSuccessEvent.Invoke();
+                    successful = true;
+                    ResetSelection(); // Testing out hypothesis below
+                }
+            }
+        return true;
+        }
+        // I need to test this, but I think if I call reset on success, then I don't need this block 
+        // if (successful == true)
+        // {
+        //     foreach (String successMatchCriterion in successMatchCriteria)
+        //     {
+        //         if (inputText == successMatchCriterion)
+        //         {
+        //             return true;
+        //         }
+        //         else 
+        //             OnFailureEvent.Invoke();
+        //             successful = false;
+        //             return false;
+        //     }
+        // }
+    return false;
+    }
+    // inputImage not used currently
+    bool SuccessProcessedImage(Sprite inputImage, String inputImageName, String inputImageTagName)
+    {
+        if (successful == false)
+        {
+            foreach (String successMatchCriterion in successMatchCriteria)
+            {
+                if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
+                {
+                    if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                    {
+                        Debug.Log("Matched" + successMatchCriterion + " on " + inputImageName + " or " + inputImageTagName);
+                    }
+                    OnSuccessEvent.Invoke();
+                    successful = true;
+                    ResetSelection(); // Testing out hypothesis below
+                }
+            }
+        return true;
+        }
+        // I need to test this, but I think if I call reset on success, then I don't need this block 
+
+        // else if (successful == true)
+        // {
+        //     foreach (String successMatchCriterion in successMatchCriteria)
+        //     {
+        //         if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
+        //         {
+        //             return true;
+        //         }
+        //         else
+        //         {
+        //             OnFailureEvent.Invoke();
+        //             successful = false;
+        //             return false;
+        //         }
+        //     }
+        // }
+    return false;
     }
 }
