@@ -28,11 +28,19 @@ public class DataManager : MonoBehaviour
     
     [Tooltip ("Position at which player fails the interview")]
     [SerializeField] public int failureThreshold = 120;
+    
+    [Tooltip ("The number of positions the player starts higher on the leaderboard after losing")]
+    [SerializeField] public int startPositionBuff = 20;
+    
+    [Tooltip ("The lowest position a player can start on the leaderboard")]
+    [SerializeField] public int startPositionMin = 30;
 
-    public static readonly int  positionDefault = 100;
+    public readonly int  positionDefault = 100;
     public int previousPosition;
 
     public int currentPosition;
+    
+    public int loseCount = 0;
 
     public static DataManager Instance;
     

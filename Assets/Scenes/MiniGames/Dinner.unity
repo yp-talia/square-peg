@@ -1019,7 +1019,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countDown: 1
-  timerDuration: 15
+  timerDuration: 20
   timerIntervalVariable: 1
   timerText: {fileID: 495547293}
   timerOnSound: {fileID: 0}

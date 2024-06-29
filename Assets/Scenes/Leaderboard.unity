@@ -349,6 +349,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiElement: {fileID: 2694976399756182293, guid: 6c96f15a555294141af60c2ea9e25e78,
     type: 3}
+--- !u!1 &949159355
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 949159357}
+  - component: {fileID: 949159356}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &949159356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949159355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93bf8901d16d40c9997624dcd374f94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &949159357
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949159355}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1918964954
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,7 +406,6 @@ GameObject:
   - component: {fileID: 1918964958}
   - component: {fileID: 1918964957}
   - component: {fileID: 1918964956}
-  - component: {fileID: 1918964955}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -370,18 +413,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1918964955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1918964954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e93bf8901d16d40c9997624dcd374f94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1918964956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,9 +437,9 @@ MonoBehaviour:
   OnEndEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1918964955}
+      - m_Target: {fileID: 949159356}
         m_TargetAssemblyTypeName: SceneManagerCustom, Assembly-CSharp
-        m_MethodName: UnloadHighestScene
+        m_MethodName: LoadSceneAdditiveFromOptions
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -418,6 +449,18 @@ MonoBehaviour:
           m_StringArgument: Leaderboard
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 949159356}
+        m_TargetAssemblyTypeName: SceneManagerCustom, Assembly-CSharp
+        m_MethodName: UnloadSceneAdditive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Leaderboard
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!114 &1918964957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,3 +549,4 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1918964960}
+  - {fileID: 949159357}

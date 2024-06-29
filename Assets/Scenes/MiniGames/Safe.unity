@@ -157,7 +157,6 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1044041172}
-  - {fileID: 1247379888}
   m_Father: {fileID: 1133423004}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -314,7 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4fd71f5aaf594ca998a35233d8c5bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollViewDataStore: {fileID: 11400000, guid: 03f36754d13684b3c9c0f3777d99e7ca,
+  scrollViewDataStore: {fileID: 11400000, guid: a0ad22704ab0b4a958aa3c59cdfbd80f,
     type: 2}
   scrollViewType: {fileID: 5901628554596918856, guid: 9415b4fb263bc4f52b91fde34a0387f8,
     type: 3}
@@ -324,7 +323,7 @@ MonoBehaviour:
   successMatchCriteria:
   - three
   failureMatchCriteria: []
-  scrollViewPositionX: 100
+  scrollViewPositionX: -200
   scrollViewPositionY: -200
   scrollViewScaleX: 0.55
   scrollViewScaleY: 0.55
@@ -423,8 +422,8 @@ MonoBehaviour:
   successMatchCriteria:
   - two
   failureMatchCriteria: []
-  scrollViewPositionX: -200
-  scrollViewPositionY: -200
+  scrollViewPositionX: 100
+  scrollViewPositionY: 100
   scrollViewScaleX: 0.55
   scrollViewScaleY: 0.55
   scrollViewScaleZ: 0.55
@@ -512,7 +511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4fd71f5aaf594ca998a35233d8c5bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollViewDataStore: {fileID: 11400000, guid: a0ad22704ab0b4a958aa3c59cdfbd80f,
+  scrollViewDataStore: {fileID: 11400000, guid: 03f36754d13684b3c9c0f3777d99e7ca,
     type: 2}
   scrollViewType: {fileID: 5901628554596918856, guid: 9415b4fb263bc4f52b91fde34a0387f8,
     type: 3}
@@ -523,7 +522,7 @@ MonoBehaviour:
   - four
   failureMatchCriteria: []
   scrollViewPositionX: 100
-  scrollViewPositionY: 100
+  scrollViewPositionY: -200
   scrollViewScaleX: 0.55
   scrollViewScaleY: 0.55
   scrollViewScaleZ: 0.55
@@ -1228,6 +1227,7 @@ RectTransform:
   m_Children:
   - {fileID: 383323139}
   - {fileID: 495547292}
+  - {fileID: 1247379888}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1248,7 +1248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countDown: 1
-  timerDuration: 15
+  timerDuration: 20
   timerIntervalVariable: 1
   timerText: {fileID: 495547293}
   timerOnSound: {fileID: 0}
@@ -1272,18 +1272,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 383323144}
-        m_TargetAssemblyTypeName: ScrollViewWriterReader, Assembly-CSharp
-        m_MethodName: ResetSelection
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Dinner
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 383323143}
         m_TargetAssemblyTypeName: ScrollViewWriterReader, Assembly-CSharp
         m_MethodName: ResetSelection
         m_Mode: 1
@@ -1382,7 +1370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed38128668b64497b857298767aa21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSuccessCount: 3
+  requiredSuccessCount: 4
   requiredFailureCount: 1
   OnGameSuccessEvent:
     m_PersistentCalls:
@@ -1420,7 +1408,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Dinner
+          m_StringArgument: Safe
           m_BoolArgument: 0
         m_CallState: 2
   OnGameFailureEvent:
@@ -1447,7 +1435,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Dinner
+          m_StringArgument: Safe
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1133423011
@@ -1488,17 +1476,17 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1247379887}
   m_LocalRotation: {x: 0.25006318, y: 0.1377815, z: 0.04083494, w: 0.95750576}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
+  m_LocalPosition: {x: 0, y: 0, z: 15}
+  m_LocalScale: {x: 0.5665, y: 0.56649995, z: 0.5665}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1051054048}
-  m_Father: {fileID: 383323139}
+  m_Father: {fileID: 1133423004}
   m_LocalEulerAnglesHint: {x: 27.88, y: 18.76, z: 9.58}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -65, y: -367}
-  m_SizeDelta: {x: -450.0003, y: -412.79987}
+  m_AnchoredPosition: {x: -304.29504, y: -418.00998}
+  m_SizeDelta: {x: -1493.0002, y: -411.39984}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1247379889
 MonoBehaviour:

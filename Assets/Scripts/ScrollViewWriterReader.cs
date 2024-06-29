@@ -324,8 +324,6 @@ public class ScrollViewWriterReader : MonoBehaviour
 
                     if (innerText != null)
                     {
-                        // Removing to move to a state based system
-                        // successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
                         selectedOption = target;
                         innerText.color = selectTextColor;
                         innerText.fontStyle = FontStyles.Underline | FontStyles.Bold;
@@ -348,8 +346,6 @@ public class ScrollViewWriterReader : MonoBehaviour
 
                     if (rawImage != null)
                     {
-                        // Removing to move to a state based system
-                        // successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
                         selectedOption = target;
                         rawImage.rectTransform.localScale = localScaleChange;
                         rawImage.color = selectImageColor;
@@ -370,8 +366,6 @@ public class ScrollViewWriterReader : MonoBehaviour
 
                     if (processedImage != null)
                     {
-                        // Removing to move to a state based system
-                        // successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
                         selectedOption = target;
                         processedImage.rectTransform.localScale = localScaleChange;
                         processedImage.color = selectImageColor;
@@ -540,7 +534,7 @@ public class ScrollViewWriterReader : MonoBehaviour
                         {
                             if (inputText == successMatchCriterion)
                             {
-                                if (dataManager.debugOnInfo == true)
+                                if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
                                 {
                                     Debug.Log("Staying in State: isSuccess. Matched " + successMatchCriterion + " on " + inputText );
                                 }
@@ -664,7 +658,7 @@ public class ScrollViewWriterReader : MonoBehaviour
                         {
                             if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
                             {
-                                if (dataManager.debugOnInfo == true)
+                                if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
                                 {
                                     Debug.Log("Staying in State: isSuccess. Matched" + successMatchCriterion + " on " + inputImageName + " or " + inputImageTagName);
                                 }
@@ -701,41 +695,6 @@ public class ScrollViewWriterReader : MonoBehaviour
                 break;
             }
         }
-        // if (successful == false)
-        // {
-        //     foreach (String successMatchCriterion in successMatchCriteria)
-        //     {
-        //         if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
-        //         {
-        //             if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
-        //             {
-        //                 Debug.Log("Matched" + successMatchCriterion + " on " + inputImageName + " or " + inputImageTagName);
-        //             }
-        //             OnSuccessEvent.Invoke();
-        //             // successful = true;
-        //             ResetSelection(); // Testing out hypothesis below
-        //         }
-        //     }
-        // return true;
-        // }
-        // // I need to test this, but I think if I call reset on success, then I don't need this block 
-
-        // else if (successful == true)
-        // {
-        //     foreach (String successMatchCriterion in successMatchCriteria)
-        //     {
-        //         if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
-        //         {
-        //             return true;
-        //         }
-        //         else
-        //         {
-        //             OnFailureEvent.Invoke();
-        //             successful = false;
-        //             return false;
-        //         }
-        //     }
-        // }
     }
 
     // Single Function to clear associated ScriptableOption.selection field
