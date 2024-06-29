@@ -18,7 +18,7 @@ public class MaterialMapper : MonoBehaviour
         dataManager = DataManager.Instance;
 
         objectMaterial = GetComponent<Renderer>().material;
-        
+
         if (dataManager.debugOnInfo == true)
         {
             Debug.Log("Got Material" + objectMaterial.name + "on" + gameObject.name);
@@ -36,14 +36,14 @@ public class MaterialMapper : MonoBehaviour
 
         if (scriptableObjectMaterial != null && scriptableObjectMaterial != objectMaterial)
         {
-                GetComponent<Renderer>().material = scriptableObjectMaterial;
-                objectMaterial = scriptableObjectMaterial;
-
-            if (dataManager.debugOnWarn == true)
-            {
-                Debug.LogWarning("Material Mapper - ScriptableObject Material Not Found");
-            }
+            GetComponent<Renderer>().material = scriptableObjectMaterial;
+            objectMaterial = scriptableObjectMaterial;
         }
+        else if (scriptableObjectMaterial == null && dataManager.debugOnWarn == true)
+        {
+            Debug.LogWarning("Material Mapper - ScriptableObject Material Not Found");
+        }
+        
     }
     // https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/types/casting-and-type-conversions
     void CollectScriptableObjectMaterial()

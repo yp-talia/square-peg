@@ -224,6 +224,7 @@ MonoBehaviour:
   - FastFood
   - Drinks
   - Sweets
+  failureMatchCriteria: []
   scrollViewPositionX: -350
   scrollViewPositionY: -25
   scrollViewScaleX: 0.6
@@ -271,6 +272,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnNotSuccessEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1133423010}
+        m_TargetAssemblyTypeName: MinigameTransitionHanlder, Assembly-CSharp
+        m_MethodName: NotSuccess
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnFailureEvent:
     m_PersistentCalls:
       m_Calls:
@@ -309,6 +325,7 @@ MonoBehaviour:
   - FastFood
   - Drinks
   - Sweets
+  failureMatchCriteria: []
   scrollViewPositionX: 350
   scrollViewPositionY: -25
   scrollViewScaleX: 0.6
@@ -356,6 +373,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnNotSuccessEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1133423010}
+        m_TargetAssemblyTypeName: MinigameTransitionHanlder, Assembly-CSharp
+        m_MethodName: NotSuccess
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnFailureEvent:
     m_PersistentCalls:
       m_Calls:
@@ -394,6 +426,7 @@ MonoBehaviour:
   - FastFood
   - Drinks
   - Sweets
+  failureMatchCriteria: []
   scrollViewPositionX: 0
   scrollViewPositionY: -25
   scrollViewScaleX: 0.6
@@ -432,6 +465,21 @@ MonoBehaviour:
       - m_Target: {fileID: 1133423010}
         m_TargetAssemblyTypeName: MinigameTransitionHanlder, Assembly-CSharp
         m_MethodName: Success
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnNotSuccessEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1133423010}
+        m_TargetAssemblyTypeName: MinigameTransitionHanlder, Assembly-CSharp
+        m_MethodName: NotSuccess
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -741,7 +789,7 @@ MonoBehaviour:
   m_MoveAction: {fileID: 0}
   m_SubmitAction: {fileID: 0}
   m_CancelAction: {fileID: 0}
-  m_LeftClickAction: {fileID: 7251690697379990795, guid: b855b06e42c4b4c12ac870447d70dcb1,
+  m_LeftClickAction: {fileID: 2992897009746374216, guid: b855b06e42c4b4c12ac870447d70dcb1,
     type: 3}
   m_MiddleClickAction: {fileID: 0}
   m_RightClickAction: {fileID: 0}
@@ -927,9 +975,9 @@ GameObject:
   - component: {fileID: 1133423009}
   - component: {fileID: 1133423008}
   - component: {fileID: 1133423007}
-  - component: {fileID: 1133423005}
-  - component: {fileID: 1133423006}
   - component: {fileID: 1133423010}
+  - component: {fileID: 1133423005}
+  - component: {fileID: 1133423011}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1018,10 +1066,10 @@ MonoBehaviour:
           m_StringArgument: Dinner
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1133423006}
-        m_TargetAssemblyTypeName: SceneManagerCustom, Assembly-CSharp
-        m_MethodName: UnloadSceneAdditive
-        m_Mode: 5
+      - m_Target: {fileID: 1133423010}
+        m_TargetAssemblyTypeName: MinigameTransitionHanlder, Assembly-CSharp
+        m_MethodName: Failure
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1030,18 +1078,6 @@ MonoBehaviour:
           m_StringArgument: Dinner
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1133423006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1133423003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e93bf8901d16d40c9997624dcd374f94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1133423007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1118,6 +1154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredSuccessCount: 3
+  requiredFailureCount: 1
   OnGameSuccessEvent:
     m_PersistentCalls:
       m_Calls:
@@ -1133,12 +1170,72 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1133423011}
+        m_TargetAssemblyTypeName: SceneManagerCustom, Assembly-CSharp
+        m_MethodName: LoadSceneAdditive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Leaderboard
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1133423011}
+        m_TargetAssemblyTypeName: SceneManagerCustom, Assembly-CSharp
+        m_MethodName: UnloadSceneAdditive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Dinner
+          m_BoolArgument: 0
+        m_CallState: 2
   OnGameFailureEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1133423011}
+        m_TargetAssemblyTypeName: SceneManagerCustom, Assembly-CSharp
+        m_MethodName: LoadSceneAdditive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Leaderboard
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1133423011}
+        m_TargetAssemblyTypeName: SceneManagerCustom, Assembly-CSharp
+        m_MethodName: UnloadSceneAdditive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Dinner
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1133423011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133423003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93bf8901d16d40c9997624dcd374f94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1133423004}
   - {fileID: 699582727}
+  - {fileID: 1133423004}

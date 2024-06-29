@@ -26,24 +26,27 @@ public class TimerHelper : MonoBehaviour
     private const float timerIntervalBase = 1f; 
     
     [Header ("Timer UI")]
-    [SerializeField] private TMP_Text timerText; //Component rendering text
+    [SerializeField] private TMP_Text timerText = null; //Component rendering text
     [SerializeField] private AudioSource timerOnSound = null; //Component for audio while timer active
     [SerializeField] private AudioSource timerEndSound = null; //Component for audio while timer end
 
     
-    [Header ("Timer Events")]
+    [Header ("Timer Events and Actions")]
     [SerializeField] private UnityEvent OnStartEvent = null; //Event to trigger on start
     [SerializeField] private UnityEvent OnEndEvent = null; //Event to trigger on end
+    // [SerializeField] bool endSceneOnTimerEnd = false;
     
     private float timeRemaining; //Place to store the reminaing time for this Timer
 
     private DataManager dataManager; // Referencing Data Manager Single
+    private SceneManagerCustom sceneManagerCustom; // Referencing Data Manager Single
 
     // Start is called before the first frame update
     void Start()
     {
         //Data manager instance
         dataManager = DataManager.Instance;
+        // sceneManagerCustom = SceneManagerCustom.Instance;
 
         OnStartEvent.Invoke(); // Outbound of OnStartEvent
         // Trigger playing of timer audio, if not null
@@ -103,9 +106,17 @@ public class TimerHelper : MonoBehaviour
     // Update text if there is one and debug
     void UpdateTimerText()
     {
-        timerText.text = timeRemaining.ToString("0");
+        if (timerText != null)
+        {
+            timerText.text = timeRemaining.ToString("0");
+        }
+        else if (dataManager.debugOnWarn == true)
+        {
+            Debug.LogWarning("Timer Text GameObject not assigned");
+        }
 
-        if (dataManager.debugOnInfo == true)
+
+        if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
         {
             Debug.Log("Timer CountdownCoroutine. Time remaining: " + timeRemaining.ToString("0"));
         }
@@ -132,9 +143,13 @@ public class TimerHelper : MonoBehaviour
     CountdownEnd();
     }
 
-    // When the timer ends, outbound on End Event, play end sound, debug
+    // When the timer ends, outbound on End Event, play end sound, debug and end scene
     void CountdownEnd()
-    {
+    {   
+        // if (endSceneOnTimerEnd == true)
+        // {
+        // sceneManagerCustom.UnloadHighestScene();
+        // }
         OnEndEvent.Invoke();
         // Trigger playing of timer audio, if not null
         if (timerEndSound != null)

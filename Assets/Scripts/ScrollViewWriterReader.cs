@@ -8,6 +8,22 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using UnityEditor;
 
+// Notes about what each Method/Function does:
+    // 1. ScrollViewWriter instatiates the ScrollView and depending on which ScriptableObject is loaded...
+    // populates the content in the correct type of GameObject
+        //1.1 CreateTextOptions - creates text values
+        //1.2 CreateRenderTextureOptions - creates Raw Images
+        //1.2 CreateTextureOptions - creates Images (Sprites)
+    // 2. HandlePointer* sends events to EventHandler
+        //2.1 HandlePointerClick is more complex, because it calls WriteOut* functions
+    // 3. WriteOutText, WriteOutImage, WriteOutRawImage write back selected value to the ScriptableObjects as needed
+        // These functions also call SuccessText and SuccessProcessedImage functions, which decide whether the user has completed the goal for that scrollview
+    // 4. SuccessText and SuccessProcessedImage use successMatchCriteria and GameplayStates to inform...
+    // MinigameTransitionHandler when a success/failure state has been reached for a ScrollView
+        // Their logic is inherently related to MinigameTransitionHandler...
+        //  probably best to have both scripts open when working on these functions
+    //5. ResetSelection is sometimes called by functions in this script, sometimes by events to reset the values of fields...
+    // in the associated ScriptableObject
 
 public class ScrollViewWriterReader : MonoBehaviour
 {
@@ -32,8 +48,14 @@ public class ScrollViewWriterReader : MonoBehaviour
     [SerializeField] private BehaviorTypes behaviorTypes;
 
     [SerializeField] private string[] successMatchCriteria;
+    [SerializeField] private string[] failureMatchCriteria;
+    
+    private enum GameplayStates { isSuccess, isNotSuccess, isFailure }; // This relates to behaviorTypes below.
 
-    private bool successful = false;
+    private GameplayStates gameplayStates = GameplayStates.isNotSuccess;
+
+    // Removing to move to a state based system build on GameplayStates
+    // private bool successful = false;
 
     [Header("Parent Position Offsets")]
     [SerializeField] private float scrollViewPositionX = 0;
@@ -67,6 +89,7 @@ public class ScrollViewWriterReader : MonoBehaviour
     [SerializeField] public UnityEvent OnSelectEvent = new UnityEvent();
     [SerializeField] public UnityEvent OnSubmitEvent = new UnityEvent();
     [SerializeField] public UnityEvent OnSuccessEvent = new UnityEvent();
+    [SerializeField] public UnityEvent OnNotSuccessEvent = new UnityEvent();
     [SerializeField] public UnityEvent OnFailureEvent = new UnityEvent();
 
     private DataManager dataManager;
@@ -301,7 +324,8 @@ public class ScrollViewWriterReader : MonoBehaviour
 
                     if (innerText != null)
                     {
-                        successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
+                        // Removing to move to a state based system
+                        // successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
                         selectedOption = target;
                         innerText.color = selectTextColor;
                         innerText.fontStyle = FontStyles.Underline | FontStyles.Bold;
@@ -324,7 +348,8 @@ public class ScrollViewWriterReader : MonoBehaviour
 
                     if (rawImage != null)
                     {
-                        successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
+                        // Removing to move to a state based system
+                        // successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
                         selectedOption = target;
                         rawImage.rectTransform.localScale = localScaleChange;
                         rawImage.color = selectImageColor;
@@ -345,7 +370,8 @@ public class ScrollViewWriterReader : MonoBehaviour
 
                     if (processedImage != null)
                     {
-                        successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
+                        // Removing to move to a state based system
+                        // successful = false; // If the user has selected a new option, then we don't know if the option is successful yet, so reset successful
                         selectedOption = target;
                         processedImage.rectTransform.localScale = localScaleChange;
                         processedImage.color = selectImageColor;
@@ -408,7 +434,7 @@ public class ScrollViewWriterReader : MonoBehaviour
                 dialogueScriptWrapper.UpdateCharacterName("PlayerCharacter", textFieldOptions.selection);
             } 
             Debug.Log("Selected: " + textFieldOptions.selection);
-            if (successMatchCriteria != null)
+            if (successMatchCriteria != null || failureMatchCriteria != null)
             {
                 SuccessText(textFieldOptions.selection);
             }
@@ -455,7 +481,7 @@ public class ScrollViewWriterReader : MonoBehaviour
                     textureTagged.selection = textureTagged.options[i];
                     textureTagged.selectionName = textureTagged.options[i].name;
                     textureTagged.selectionTagName = textureTagged.pairedOptionTag[i].ToString();
-                    if (successMatchCriteria != null)
+                    if (successMatchCriteria != null || failureMatchCriteria != null)
                     {
                         SuccessProcessedImage(textureTagged.selection, textureTagged.selectionName, textureTagged.selectionTagName);
                     }
@@ -464,6 +490,254 @@ public class ScrollViewWriterReader : MonoBehaviour
         }
     }
     
+
+    void SuccessText(String inputText)
+    {
+        switch (gameplayStates)
+        {
+            case GameplayStates.isNotSuccess:
+                {
+                    if (successMatchCriteria != null)
+                    {
+                        foreach (String successMatchCriterion in successMatchCriteria)
+                        {
+                            if (inputText == successMatchCriterion)
+                            {
+                                if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                                {
+                                    Debug.Log("Moving to State: isSuccess. Matched " + successMatchCriterion + " on " + inputText);
+                                }
+                                OnSuccessEvent.Invoke();
+                                gameplayStates = GameplayStates.isSuccess;
+                                ResetSelection();
+                                break;
+                            }
+                        }
+                    }
+                    if (failureMatchCriteria != null)
+                    {
+                        foreach (String failureMatchCriterion in failureMatchCriteria)
+                        {
+                            if (inputText == failureMatchCriterion)
+                            {
+                                if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                                {
+                                    Debug.Log("Moving to State: isFailure. Matched " + failureMatchCriterion + " on " + inputText);
+                                }
+                                OnFailureEvent.Invoke();
+                                gameplayStates = GameplayStates.isFailure;
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            case GameplayStates.isSuccess:
+                {
+                    if (successMatchCriteria != null)
+                    {
+                        foreach (String successMatchCriterion in successMatchCriteria)
+                        {
+                            if (inputText == successMatchCriterion)
+                            {
+                                if (dataManager.debugOnInfo == true)
+                                {
+                                    Debug.Log("Staying in State: isSuccess. Matched " + successMatchCriterion + " on " + inputText );
+                                }
+                                ResetSelection(); 
+                                break;
+                            }
+                        }
+                    }
+                    if (failureMatchCriteria != null)
+                    {
+                        foreach (String failureMatchCriterion in failureMatchCriteria)
+                        {
+                            if (inputText == failureMatchCriterion || inputText == failureMatchCriterion)
+                            {
+                                if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                                {
+                                    Debug.Log("Moving to State: isFailure. Matched " + failureMatchCriterion + " on " + inputText);
+                                }
+                                OnNotSuccessEvent.Invoke();
+                                OnFailureEvent.Invoke();
+                                gameplayStates = GameplayStates.isFailure;
+                                break;
+                            }
+                        }
+                    }
+                    if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                    {
+                        Debug.Log("Moving to State: isNotSuccess. No Match on " + inputText);
+                    }
+                    OnNotSuccessEvent.Invoke();
+                    gameplayStates = GameplayStates.isNotSuccess;
+                    break;
+                }
+            case GameplayStates.isFailure:
+            {
+                // put logic in here when you define this state
+                break;
+            }
+        }
+
+        // if (successful == false)
+        // {
+        //     foreach (String successMatchCriterion in successMatchCriteria)
+        //     {
+        //         if (inputText == successMatchCriterion)
+        //         {
+        //             if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+        //             {
+        //                 Debug.Log("Matched" + successMatchCriterion + " on " + inputText);
+        //             }
+        //             OnSuccessEvent.Invoke();
+        //             successful = true;
+        //             ResetSelection(); // Testing out hypothesis below
+        //         }
+        //     }
+        // return true;
+        // }
+        // 
+
+        // I need to test this, but I think if I call reset on success, then I don't need this block 
+        // if (successful == true)
+        // {
+        //     foreach (String successMatchCriterion in successMatchCriteria)
+        //     {
+        //         if (inputText == successMatchCriterion)
+        //         {
+        //             return true;
+        //         }
+        //         else 
+        //             OnFailureEvent.Invoke();
+        //             successful = false;
+        //             return false;
+        //     }
+        // }
+    }
+    // inputImage not used currently
+    void SuccessProcessedImage(Sprite inputImage, String inputImageName, String inputImageTagName)
+    {
+        switch (gameplayStates)
+        {
+            case GameplayStates.isNotSuccess:
+                {
+                    if (successMatchCriteria != null)
+                    {
+                        foreach (String successMatchCriterion in successMatchCriteria)
+                        {
+                            if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
+                            {
+                                if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                                {
+                                    Debug.Log("Moving to State: isSuccess. Matched" + successMatchCriterion + " on " + inputImageName + " or " + inputImageTagName);
+                                }
+                                OnSuccessEvent.Invoke();
+                                gameplayStates = GameplayStates.isSuccess;
+                                ResetSelection(); // Testing out hypothesis below
+                            }
+                        }
+                    }
+                    if (failureMatchCriteria != null)
+                    {
+                        foreach (String failureMatchCriterion in failureMatchCriteria)
+                        {
+                            if (inputImageName == failureMatchCriterion || inputImageTagName == failureMatchCriterion)
+                            {
+                                if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                                {
+                                    Debug.Log("Moving to State: isFailure. Matched" + failureMatchCriterion + " on " + inputImageName + " or " + inputImageTagName);
+                                }
+                                OnFailureEvent.Invoke();
+                                gameplayStates = GameplayStates.isFailure;
+                            }
+                        }
+                    }
+                    break;
+                }
+            case GameplayStates.isSuccess:
+                {
+                    if (successMatchCriteria != null)
+                    {
+                        foreach (String successMatchCriterion in successMatchCriteria)
+                        {
+                            if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
+                            {
+                                if (dataManager.debugOnInfo == true)
+                                {
+                                    Debug.Log("Staying in State: isSuccess. Matched" + successMatchCriterion + " on " + inputImageName + " or " + inputImageTagName);
+                                }
+                                ResetSelection(); // Testing out hypothesis below
+                            }
+                        }
+                    }
+                    if (failureMatchCriteria != null)
+                    {
+                        foreach (String failureMatchCriterion in failureMatchCriteria)
+                        {
+                            if (inputImageName == failureMatchCriterion || inputImageTagName == failureMatchCriterion)
+                            {
+                                if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                                {
+                                    Debug.Log("Moving to State: isFailure. Matched" + failureMatchCriterion + " on " + inputImageName + " or " + inputImageTagName);
+                                }
+                                OnFailureEvent.Invoke();
+                                gameplayStates = GameplayStates.isFailure;
+                            }
+                        }
+                    }
+                    if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+                    {
+                        Debug.Log("Moving to State: isNotSuccess. No Match on " + inputImageName + " or " + inputImageTagName);
+                    }
+                    OnNotSuccessEvent.Invoke();
+                    gameplayStates = GameplayStates.isNotSuccess;
+                    break;
+                }
+            case GameplayStates.isFailure:
+            {
+                // put logic in here when you define this state
+                break;
+            }
+        }
+        // if (successful == false)
+        // {
+        //     foreach (String successMatchCriterion in successMatchCriteria)
+        //     {
+        //         if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
+        //         {
+        //             if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
+        //             {
+        //                 Debug.Log("Matched" + successMatchCriterion + " on " + inputImageName + " or " + inputImageTagName);
+        //             }
+        //             OnSuccessEvent.Invoke();
+        //             // successful = true;
+        //             ResetSelection(); // Testing out hypothesis below
+        //         }
+        //     }
+        // return true;
+        // }
+        // // I need to test this, but I think if I call reset on success, then I don't need this block 
+
+        // else if (successful == true)
+        // {
+        //     foreach (String successMatchCriterion in successMatchCriteria)
+        //     {
+        //         if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
+        //         {
+        //             return true;
+        //         }
+        //         else
+        //         {
+        //             OnFailureEvent.Invoke();
+        //             successful = false;
+        //             return false;
+        //         }
+        //     }
+        // }
+    }
+
     // Single Function to clear associated ScriptableOption.selection field
     public void ResetSelection()
     {
@@ -503,82 +777,5 @@ public class ScrollViewWriterReader : MonoBehaviour
             Debug.LogWarning("ResetSelection - Other ScriptableObject type than expected");
             }
         }
-    }
-
-    bool SuccessText(String inputText)
-    {
-        if (successful == false)
-        {
-            foreach (String successMatchCriterion in successMatchCriteria)
-            {
-                if (inputText == successMatchCriterion)
-                {
-                    if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
-                    {
-                        Debug.Log("Matched" + successMatchCriterion + " on " + inputText);
-                    }
-                    OnSuccessEvent.Invoke();
-                    successful = true;
-                    ResetSelection(); // Testing out hypothesis below
-                }
-            }
-        return true;
-        }
-        // I need to test this, but I think if I call reset on success, then I don't need this block 
-        // if (successful == true)
-        // {
-        //     foreach (String successMatchCriterion in successMatchCriteria)
-        //     {
-        //         if (inputText == successMatchCriterion)
-        //         {
-        //             return true;
-        //         }
-        //         else 
-        //             OnFailureEvent.Invoke();
-        //             successful = false;
-        //             return false;
-        //     }
-        // }
-    return false;
-    }
-    // inputImage not used currently
-    bool SuccessProcessedImage(Sprite inputImage, String inputImageName, String inputImageTagName)
-    {
-        if (successful == false)
-        {
-            foreach (String successMatchCriterion in successMatchCriteria)
-            {
-                if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
-                {
-                    if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
-                    {
-                        Debug.Log("Matched" + successMatchCriterion + " on " + inputImageName + " or " + inputImageTagName);
-                    }
-                    OnSuccessEvent.Invoke();
-                    successful = true;
-                    ResetSelection(); // Testing out hypothesis below
-                }
-            }
-        return true;
-        }
-        // I need to test this, but I think if I call reset on success, then I don't need this block 
-
-        // else if (successful == true)
-        // {
-        //     foreach (String successMatchCriterion in successMatchCriteria)
-        //     {
-        //         if (inputImageName == successMatchCriterion || inputImageTagName == successMatchCriterion)
-        //         {
-        //             return true;
-        //         }
-        //         else
-        //         {
-        //             OnFailureEvent.Invoke();
-        //             successful = false;
-        //             return false;
-        //         }
-        //     }
-        // }
-    return false;
     }
 }

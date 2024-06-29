@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfef697d2910342118d57a4f9faf0e89, type: 3}
+  m_Name: AwardList1
+  m_EditorClassIdentifier: 
+  options:
+  - {fileID: 21300000, guid: 4793dfeefe5be452ebc29b380e2eea05, type: 3}
+  - {fileID: 21300000, guid: 94272627a52564faf927b55fff510306, type: 3}
+  - {fileID: 21300000, guid: d223ea0c89ed5432f9f49f0b473491cf, type: 3}
+  - {fileID: 21300000, guid: 1d5bb3d8590e247348926fd5ba5412e2, type: 3}
+  - {fileID: 21300000, guid: 34d26b2e354bf40e5a17ddfa3808c6d1, type: 3}
+  - {fileID: 21300000, guid: a0c31108ea58f4ef9b9057bd117447df, type: 3}
+  - {fileID: 21300000, guid: 4adb615df58c149dc93e220aab4aca51, type: 3}
+  pairedOptionTag: 02000000000000000000000000000000000000000000000003000000
+  selection: {fileID: 0}
+  selectionName: 
+  selectionTagName: 

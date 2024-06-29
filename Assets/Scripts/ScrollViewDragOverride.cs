@@ -6,14 +6,29 @@ using UnityEngine.UI;
 
 public class ScrollViewDragOverride : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    private DataManager dataManager;
+
     public ScrollRect scrollRect;
+
+    void Start()
+    {
+        dataManager = DataManager.Instance;
+
+        if (dataManager.debugOnInfo == true)
+        {
+            Debug.Log("ScrollView Drag Override Start Complete");
+        }
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (scrollRect != null)
         {
             scrollRect.OnBeginDrag(eventData);
+            if (dataManager.debugOnInfo == true)
+            {
             Debug.Log("ScrollViewDragOverride - OnBeginDrag");
+            }
         }
     }
 
@@ -22,7 +37,10 @@ public class ScrollViewDragOverride : MonoBehaviour, IBeginDragHandler, IDragHan
         if (scrollRect != null)
         {
             scrollRect.OnDrag(eventData);
+            if (dataManager.debugOnInfo == true)
+            {
             Debug.Log("ScrollViewDragOverride - OnDrag");
+            }
         }
     }
 
@@ -31,7 +49,10 @@ public class ScrollViewDragOverride : MonoBehaviour, IBeginDragHandler, IDragHan
         if (scrollRect != null)
         {
             scrollRect.OnEndDrag(eventData);
+            if (dataManager.debugOnInfo == true)
+            {
             Debug.Log("ScrollViewDragOverride - OnEndDrag");
+            }
         }
     }
 }

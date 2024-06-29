@@ -9,14 +9,32 @@ public class DataManager : MonoBehaviour
     public bool debugOnInfo = true;
     public bool debugOnInfoPriority = true; // Adding this in because debugOnInfo is really noisy
 
-    [Header ("Gameplay Constants")]
+    [Header ("Gameplay Contstants")]
 
-    public int positionsGainableMin = 1;
-    public int positionsGainableMax = 20;
-    public int positionsLosableMin = 5;
-    public int positionsLosableMax = 15;
+    [Tooltip ("Minimum number of places that ranking can increase onSuccess")]
+    [SerializeField] public int positionsGainableMin = 1;
+    
+    [Tooltip ("Maximum number of places that ranking can increase onSuccess")]
+    [SerializeField] public int positionsGainableMax = 20;
+    
+    [Tooltip ("Minimum number of places that ranking can decrease onFailure")]
+    [SerializeField] public int positionsLosableMin = 5;
+    
+    [Tooltip ("Maximum number of places that ranking can decrease onFailure")]
+    [SerializeField] public int positionsLosableMax = 15;
+    
+    [Tooltip ("Position at which player gets hired")]
+    [SerializeField] public int successThreshold = 1;
+    
+    [Tooltip ("Position at which player fails the interview")]
+    [SerializeField] public int failureThreshold = 120;
 
-    public static DataManager Instance {get; private set;}
+    public static readonly int  positionDefault = 100;
+    public int previousPosition;
+
+    public int currentPosition;
+
+    public static DataManager Instance;
     
     //Singleton pattern below
     private void Awake()
@@ -36,6 +54,14 @@ public class DataManager : MonoBehaviour
         {
             Debug.Log("Data Manager Awake Complete");
         }
+    previousPosition = positionDefault;
+
+    currentPosition = positionDefault;
     }
-    // TODO: Write public setter function for private data
+    
+    public void ResetPlayerRank()
+    {
+        previousPosition = positionDefault;
+        currentPosition = positionDefault;
+    }
 }
