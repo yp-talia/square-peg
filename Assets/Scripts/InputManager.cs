@@ -41,21 +41,21 @@ public class InputManager : MonoBehaviour
     
     [Header ("Action Name References")]
     [SerializeField] private string exit = "Exit";
-    [SerializeField] private string pause = "Pause";
+    // [SerializeField] private string pause = "Pause";
     // [SerializeField] private string fullscreen = "Fullscreen";
     [SerializeField] private string click = "Click";
     [SerializeField] private string point = "Point";
 
     // Updating this to handle multiple ActionNameMaps for an Action Name
     private InputAction exitAction;
-    private InputAction pauseAction;
+    // private InputAction pauseAction;
     // private InputAction fullscreenAction;
     private InputAction clickAction;
     private InputAction pointAction;
 
     //FUTURE ME: Remember bool for buttons, Vector2 for directions
     public bool ExitTriggered {get; private set;} 
-    public bool PauseTriggered {get; private set;} 
+    // public bool PauseTriggered {get; private set;} 
     // public bool FullscreenTriggered {get; private set;} 
     public bool ClickTriggered {get; private set;} 
     public Vector2 PointInput {get; private set;} 
@@ -79,7 +79,7 @@ public class InputManager : MonoBehaviour
         }
     
     exitAction = playerControls.FindActionMap(actionMapName).FindAction(exit);
-    pauseAction = playerControls.FindActionMap(actionMapName).FindAction(pause);
+    // pauseAction = playerControls.FindActionMap(actionMapName).FindAction(pause);
     // fullscreenAction = playerControls.FindActionMap(actionMapName).FindAction(fullscreen);
     clickAction = playerControls.FindActionMap(actionMapName).FindAction(click);
     pointAction = playerControls.FindActionMap(actionMapName).FindAction(point);
@@ -102,8 +102,8 @@ public class InputManager : MonoBehaviour
         exitAction.performed += context => ExitTriggered = true;
         exitAction.canceled += context => ExitTriggered = false;
 
-        pauseAction.performed += context => PauseTriggered = true;
-        pauseAction.canceled += context => PauseTriggered = false;
+        // pauseAction.performed += context => PauseTriggered = true;
+        // pauseAction.canceled += context => PauseTriggered = false;
 
         // fullscreenAction.performed += context => FullscreenTriggered = true;
         // fullscreenAction.canceled += context => FullscreenTriggered = false;
@@ -124,7 +124,7 @@ public class InputManager : MonoBehaviour
     void OnEnable()
     {
         exitAction.Enable();
-        pauseAction.Enable();
+        // pauseAction.Enable();
         // fullscreenAction.Enable();
         clickAction.Enable();
                 // Only applies to the UI action map
@@ -136,7 +136,7 @@ public class InputManager : MonoBehaviour
     void OnDisable()
     {
         exitAction.Disable();
-        pauseAction.Disable();
+        // pauseAction.Disable();
         // fullscreenAction.Disable();
         clickAction.Disable();
         if (actionMapName == "UI")
@@ -153,10 +153,10 @@ public class InputManager : MonoBehaviour
             {
                 Debug.Log("Exit performed");
             }
-            if (PauseTriggered == true)
-            {
-                Debug.Log("Pause performed");
-            }
+            // if (PauseTriggered == true)
+            // {
+            //     Debug.Log("Pause performed");
+            // }
             // if (FullscreenTriggered == true)
             // {
             //     Debug.Log("Fullscreen performed");

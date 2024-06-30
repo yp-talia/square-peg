@@ -45026,6 +45026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02403ac3ec8a843c1a34c3f8b5c088b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  webGLHideables: []
 --- !u!4 &991344619
 Transform:
   m_ObjectHideFlags: 0
@@ -45861,16 +45862,7 @@ MonoBehaviour:
   - dialogueCharacter: {fileID: 11400000, guid: 1ad42a014fa10447793c160f2bdb66e5,
       type: 2}
     sentence: I'm not sure that this is any of those things?
-    skipDelayTime: 5
-    disableInput: 1
-    sentenceSound: {fileID: 0}
-    sentenceEvent:
-      m_PersistentCalls:
-        m_Calls: []
-  - dialogueCharacter: {fileID: 11400000, guid: 1ad42a014fa10447793c160f2bdb66e5,
-      type: 2}
-    sentence: I'm not sure that this is any of those things?
-    skipDelayTime: 5
+    skipDelayTime: 4
     disableInput: 1
     sentenceSound: {fileID: 0}
     sentenceEvent:
@@ -45880,7 +45872,7 @@ MonoBehaviour:
       type: 2}
     sentence: "I forgot to mention. \n\nNew HR Policy means that I'll be directly
       comparing you to all other candidates... in real time."
-    skipDelayTime: 5
+    skipDelayTime: 6
     disableInput: 1
     sentenceSound: {fileID: 0}
     sentenceEvent:
