@@ -164,7 +164,7 @@ CountDown - Sound Effect by <a href="https://pixabay.com/users/patw64-16142356/?
 
 **Other**
 
-[Random Name Generator]((https://www.behindthename.com/random/?gender=both&number=1&sets=5&surname=&randomsurname=yes&all=yes))
+[Random Name Generator]([URL](https://www.behindthename.com/random/?gender=both&number=1&sets=5&surname=&randomsurname=yes&all=yes))
 
 Where relevant links to relevant documentation, forum posts, tutorials, and guides are included within code comments.
 
