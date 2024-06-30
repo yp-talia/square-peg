@@ -114,6 +114,9 @@ The most notable is Dialogue System - which in hindsight, may have been less wor
 - 2D Sprite - https://docs.unity3d.com/Packages/com.unity.2d.sprite@1.0/manual/index.html
 - DotTween - https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676
 
+**3D Assets**
+
+Office Supplies Low Poly - [https://assetstore.unity.com/packages/3d/props/office-supplies-low-poly-105519](https://assetstore.unity.com/packages/3d/props/office-supplies-low-poly-105519])
 **Images**
 
 Crumpled Paper Texture: Photo by [SJ Objio](https://unsplash.com/@sjobjio?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/white-and-gray-floral-textile-XFWiZTa2Ub0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
