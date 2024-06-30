@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countDown: 1
-  timerDuration: 5
+  timerDuration: 6
   timerIntervalVariable: 1
   timerText: {fileID: 0}
   timerOnSound: {fileID: 0}
@@ -427,7 +427,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 847140763}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -444,8 +444,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 847140770}
-  duration: 2
-  fadeIn: 1
+  duration: 3.5
+  fadeDirection: 0
 --- !u!1 &966965404
 GameObject:
   m_ObjectHideFlags: 0

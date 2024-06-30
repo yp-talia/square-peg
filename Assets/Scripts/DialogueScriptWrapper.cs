@@ -65,11 +65,9 @@ public class DialogueScriptWrapper : MonoBehaviour
         // Variable for constructed path to the character's file
         string characterPath = "Dialogue/" + characterType;
         // In order to be editable at runtime, a file needs to be Resources -- https://docs.unity3d.com/ScriptReference/Resources.Load.html
-        // 
+
         DialogueCharacter character = Resources.Load<DialogueCharacter>(characterPath);
 
-        // From reading through the Unity forums, Scriptable Objects don't always report being null. So checking myself...
-        // with Error logging in the else
         if (character != null)
         {
             // Checking to see whether the name has changed
@@ -79,7 +77,7 @@ public class DialogueScriptWrapper : MonoBehaviour
                 character.characterName = curCharacterName;
                 prevCharacterName = character.characterName;
                 // If we've got debug logging on, write message to console
-                if (dataManager.debugOnInfo == true)
+                if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
                 {
                     Debug.Log("DialogueCharacter PlayerCharacter playerName set to:" + character.characterName);
                 }

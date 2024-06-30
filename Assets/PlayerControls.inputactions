@@ -24,15 +24,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "FullScreen",
-                    "type": "Button",
-                    "id": "90ba3407-a00e-4586-9b5b-cc917fc9fcba",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Click",
                     "type": "Button",
                     "id": "9eb3da24-7187-4d1e-bb73-f4016ac5a01c",
@@ -62,17 +53,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "470422c0-e243-4490-8892-acc1fb106490",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "FullScreen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -134,15 +114,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "FullScreen",
-                    "type": "Button",
-                    "id": "951d0948-f5d1-4a05-8405-85b4d2225143",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Click",
                     "type": "Button",
                     "id": "531baf00-be91-4bfa-967d-59f535ecf582",
@@ -181,17 +152,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "487309c9-999e-4f08-bcf8-996b247e220a",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "FullScreen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

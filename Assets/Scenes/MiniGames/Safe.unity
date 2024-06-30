@@ -223,7 +223,8 @@ MonoBehaviour:
   behaviorTypes: 1
   successMatchCriteria:
   - one
-  failureMatchCriteria: []
+  failureMatchCriteria:
+  - bell
   scrollViewPositionX: -200
   scrollViewPositionY: 100
   scrollViewScaleX: 0.55
@@ -322,7 +323,8 @@ MonoBehaviour:
   behaviorTypes: 1
   successMatchCriteria:
   - three
-  failureMatchCriteria: []
+  failureMatchCriteria:
+  - bell
   scrollViewPositionX: -200
   scrollViewPositionY: -200
   scrollViewScaleX: 0.55
@@ -421,7 +423,8 @@ MonoBehaviour:
   behaviorTypes: 1
   successMatchCriteria:
   - two
-  failureMatchCriteria: []
+  failureMatchCriteria:
+  - bell
   scrollViewPositionX: 100
   scrollViewPositionY: 100
   scrollViewScaleX: 0.55
@@ -520,7 +523,8 @@ MonoBehaviour:
   behaviorTypes: 1
   successMatchCriteria:
   - four
-  failureMatchCriteria: []
+  failureMatchCriteria:
+  - bell
   scrollViewPositionX: 100
   scrollViewPositionY: -200
   scrollViewScaleX: 0.55

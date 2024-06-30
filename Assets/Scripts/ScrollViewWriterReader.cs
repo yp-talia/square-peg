@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
-using UnityEditor;
 
 // Notes about what each Method/Function does:
     // 1. ScrollViewWriter instatiates the ScrollView and depending on which ScriptableObject is loaded...
@@ -54,9 +53,6 @@ public class ScrollViewWriterReader : MonoBehaviour
 
     private GameplayStates gameplayStates = GameplayStates.isNotSuccess;
 
-    // Removing to move to a state based system build on GameplayStates
-    // private bool successful = false;
-
     [Header("Parent Position Offsets")]
     [SerializeField] private float scrollViewPositionX = 0;
     [SerializeField] private float scrollViewPositionY = 0;
@@ -95,8 +91,7 @@ public class ScrollViewWriterReader : MonoBehaviour
     private DataManager dataManager;
     private DialogueScriptWrapper dialogueScriptWrapper;
 
-    // ! There is a bug which occurs when this script is in the first scene to load.
-        // ! If that becomes a requirement, you'll need to fix it.
+    // ! There is a bug which occurs when this script is the first in the scene to load... if it becomes a necessity i'll fit it
     void Start()
     {
         dataManager = DataManager.Instance;
@@ -239,7 +234,6 @@ public class ScrollViewWriterReader : MonoBehaviour
         }
     }
 
-    //TODO: Updated HandlePointerEnter, HandlePointerExit
     public void HandlePointerEnter(GameObject target, PointerEventData data)
     {
         TMP_Text innerText = target.GetComponentInChildren<TMP_Text>();
@@ -574,41 +568,6 @@ public class ScrollViewWriterReader : MonoBehaviour
                 break;
             }
         }
-
-        // if (successful == false)
-        // {
-        //     foreach (String successMatchCriterion in successMatchCriteria)
-        //     {
-        //         if (inputText == successMatchCriterion)
-        //         {
-        //             if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
-        //             {
-        //                 Debug.Log("Matched" + successMatchCriterion + " on " + inputText);
-        //             }
-        //             OnSuccessEvent.Invoke();
-        //             successful = true;
-        //             ResetSelection(); // Testing out hypothesis below
-        //         }
-        //     }
-        // return true;
-        // }
-        // 
-
-        // I need to test this, but I think if I call reset on success, then I don't need this block 
-        // if (successful == true)
-        // {
-        //     foreach (String successMatchCriterion in successMatchCriteria)
-        //     {
-        //         if (inputText == successMatchCriterion)
-        //         {
-        //             return true;
-        //         }
-        //         else 
-        //             OnFailureEvent.Invoke();
-        //             successful = false;
-        //             return false;
-        //     }
-        // }
     }
     // inputImage not used currently
     void SuccessProcessedImage(Sprite inputImage, String inputImageName, String inputImageTagName)
