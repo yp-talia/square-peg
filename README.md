@@ -25,9 +25,6 @@ By using Unity, not only could I present both 2D and 3D scenes together, but als
 ![Screenshot 2024-06-30 at 01 37 30](https://github.com/yp-talia/cs50g/assets/94854224/f9975422-e0f6-41cb-97ff-e36c7032a136)
 <img width="1261" alt="Screenshot 2024-06-30 at 03 07 25" src="https://github.com/yp-talia/cs50g/assets/94854224/404d2bdd-1985-45a9-a089-9845e0753582">
 
-![Screenshot 2024-06-30 at 01 37 30](https://github.com/yp-talia/cs50g/assets/94854224/e856dcbc-18c8-4d40-86c2-8a5040883b30)
-
-
 - Runs and is playable
 - Can be quit by holding ESC or pressing the Quit button in the start menu (Desktop only)
 
