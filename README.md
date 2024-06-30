@@ -35,8 +35,8 @@ In addition to gameplay States, there are a number of transition states, menu st
 
 **Menu States:**
 
-- Start (menu)
-- Controls (menu)
+- StartMenu
+- MainMenu
 
 **3D Gameplay States:**
 
@@ -90,8 +90,6 @@ The player is then presented with an interview scene (Office1) in which the firs
     - For each time the player reaches the failureThreshold (loses) their starting position is improved by (startPositionBuff * loseCount)
         - This decreases the chance that they will lose (as quickly/at all) on the next run, and makes the game more weighted towards the player as it progresses.
 
- 
-
 ### Libraries, Assets and other sources
 
 Below is a list of packages and assets used in the final game. 
@@ -116,8 +114,13 @@ The most notable is Dialogue System - which in hindsight, may have been less wor
 
 **3D Assets**
 
-Office Supplies Low Poly - [https://assetstore.unity.com/packages/3d/props/office-supplies-low-poly-105519](https://assetstore.unity.com/packages/3d/props/office-supplies-low-poly-105519])
+Office Pack Free - [https://assetstore.unity.com/packages/3d/props/interior/office-pack-free-258600](https://assetstore.unity.com/packages/3d/props/interior/office-pack-free-258600)
+
 **Images**
+
+Visitor/Leaver - [https://www.pngwing.com/en/free-png-puvyr/download?width=400](https://www.pngwing.com/en/free-png-puvyr/download?width=400)
+
+Arrow - <a href='https://pngtree.com/freepng/rising-arrows_5990754.html'>png image from pngtree.com/</a>
 
 Crumpled Paper Texture: Photo by [SJ Objio](https://unsplash.com/@sjobjio?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/white-and-gray-floral-textile-XFWiZTa2Ub0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
 
@@ -139,11 +142,15 @@ Animal pen - https://www.pngwing.com/en/free-png-zrjlr/download?width=300
 
 Rug - https://www.pngwing.com/en/free-png-xtczw/download?width=200
 
+Keyboard Keys - https://www.vecteezy.com/png/9383884-laptop-device-clipart-design-illustration
+
 **Music**
+
+Miyagisama - Time's Ticking (Cinematic: Energetic, Urgent) - Music by <a href="https://pixabay.com/users/miyagisama-491779/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=8819">Miyagisama</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=8819">Pixabay</a>
 
 Old Vinyl Crackle- Sound Effect by <a href="https://pixabay.com/users/whitenoisesleepers-42647563/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=194006">Jens-Kristian Ekholm</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=194006">Pixabay</a>
 
-**Jazz loop -** Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=7163">Pixabay</a>
+Jazz loop - Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=7163">Pixabay</a>
 
 Smooth R&B - Music by <a href="https://pixabay.com/users/beatmekanik-14584889/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Johnathon Horner</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Pixabay</a>
 
@@ -193,3 +200,31 @@ Where relevant links to relevant documentation, forum posts, tutorials, and guid
     - The remainder of this ReadMe describes the complexity of the systems built, their purpose and the rationale for doing so.
 
 ## Technical Implementation Details
+
+Not included below are minor edits to included packages, which are largely contained to the Dialogue Manager.
+
+1. Prefabs
+    
+    — Trans Canvas
+    
+    — Parent Image
+    
+    — Title
+    
+    — Timer Display
+    
+    Use Parent Image as Origin for Instantiated 2D GameObjects - GrandParent
+    
+    Initiate the Parent Inside the GrandParent - used for Position
+    
+    Initiate the Child Inside the Parent - largely used for styling and container for content
+    
+    Instantiate content inside Child from Array in ScriptableObject
+    
+2. ScriptableObjects - output to Resources for access
+3. “Manager” Classes
+4. Wrappers
+5. Handlers and Helpers
+   - EventHandler oversees events created by the pointer. The exception to this are the menu screens, where due to their single use nature, it was more effective to use Event Triggers in the Unity Inspeector
+7. Overrides
+8. Readers/Writers
