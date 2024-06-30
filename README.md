@@ -22,9 +22,11 @@ By using Unity, not only could I present both 2D and 3D scenes together, but als
 
 - The game boots up (builds tested on WebGL and MacOS)
 
-!https://prod-files-secure.s3.us-west-2.amazonaws.com/69592aa9-f64c-4d80-a229-a6ce643a4f0d/2c34c13d-01c7-4031-8dc5-5c4e4abe234c/Screenshot_2024-06-30_at_01.37.30.jpg
+![Screenshot 2024-06-30 at 01 37 30](https://github.com/yp-talia/cs50g/assets/94854224/f9975422-e0f6-41cb-97ff-e36c7032a136)
+<img width="1261" alt="Screenshot 2024-06-30 at 03 07 25" src="https://github.com/yp-talia/cs50g/assets/94854224/404d2bdd-1985-45a9-a089-9845e0753582">
 
-!https://prod-files-secure.s3.us-west-2.amazonaws.com/69592aa9-f64c-4d80-a229-a6ce643a4f0d/69d9bbc4-37ee-4b6a-9393-ad156212b1e8/Screenshot_2024-06-30_at_03.07.25.png
+![Screenshot 2024-06-30 at 01 37 30](https://github.com/yp-talia/cs50g/assets/94854224/e856dcbc-18c8-4d40-86c2-8a5040883b30)
+
 
 - Runs and is playable
 - Can be quit by holding ESC or pressing the Quit button in the start menu (Desktop only)
