@@ -8,6 +8,8 @@ public class BuildManager : MonoBehaviour
 {
     public static BuildManager Instance { get; private set; }
 
+    [SerializeField] private GameObject[] webGLHideables;
+
     private DataManager dataManager;
     private InputManager inputManager;
     private void Start()
@@ -31,7 +33,7 @@ public class BuildManager : MonoBehaviour
         {
             Debug.Log("Build Manager Start Complete");
         }
-
+    DisableIfWebGL();
     }
     void Update()
     {
@@ -56,5 +58,18 @@ public class BuildManager : MonoBehaviour
             UnityEditor.EditorApplication.isPlaying = false;
         }
 #endif
+    }
+    private void DisableIfWebGL()
+    {
+        #if UNITY_WEBGL
+        foreach (GameObject webGLHideable in webGLHideables)
+        {
+            if (dataManager.debugOnInfoPriority == true)
+            {
+                Debug.Log("Disabling " + webGLHideable.name + " onWebGL");
+            }
+            webGLHideable.SetActive(false);
+        }
+        #endif
     }
 }

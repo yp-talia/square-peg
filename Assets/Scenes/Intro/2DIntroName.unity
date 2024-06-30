@@ -155,6 +155,8 @@ MonoBehaviour:
   contentItemType: {fileID: 2694976399756182293, guid: 1aa4d3a56056a4e27968d8d32c3bbb33,
     type: 3}
   behaviorTypes: 0
+  successMatchCriteria: []
+  failureMatchCriteria: []
   scrollViewPositionX: 0
   scrollViewPositionY: 0
   scrollViewScaleX: 1
@@ -199,6 +201,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnSuccessEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnNotSuccessEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFailureEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &648553383
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb730c105c3cc41ae98dd707ac1722c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursorTexture: {fileID: 2800000, guid: cc2c3609f59464eada08d965e115c54e, type: 3}
+  cursorTexture1: {fileID: 2800000, guid: cc2c3609f59464eada08d965e115c54e, type: 3}
+  cursorTexture2: {fileID: 0}
   cursorMode: 1
   cursorsHotSpot: {x: 2, y: 59}
 --- !u!114 &785868404 stripped

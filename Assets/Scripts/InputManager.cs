@@ -67,6 +67,7 @@ public class InputManager : MonoBehaviour
     //Singleton pattern below
     private void Awake()
     {
+
         if (Instance == null)
         {
             Instance = this;
@@ -77,9 +78,6 @@ public class InputManager : MonoBehaviour
             Destroy(gameObject);
         }
     
-    // Instance of Data Manager
-    dataManager = DataManager.Instance;
-    
     exitAction = playerControls.FindActionMap(actionMapName).FindAction(exit);
     pauseAction = playerControls.FindActionMap(actionMapName).FindAction(pause);
     // fullscreenAction = playerControls.FindActionMap(actionMapName).FindAction(fullscreen);
@@ -88,6 +86,9 @@ public class InputManager : MonoBehaviour
     
     // We need to register that the above actions happened, so...
     RegisterInputActions();
+    
+    // Instance of Data Manager
+    dataManager = DataManager.Instance;
 
         if (dataManager.debugOnInfo == true)
         {
