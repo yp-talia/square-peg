@@ -1,16 +1,18 @@
-# ReadMe
+# ReadMe - Square Peg: A completely ridiculous commentary on modern job hunting and corporate culture... or how I gave it all up to go and join the circus.
 
 ## Scope
 
-A satirical examination of the modern job-seeking process, presented as a collection of mini-games. In these games, a customizable character attempts to get hired through an unexpectedly bizarre and fast-paced hiring process while uncovering weird corporate culture and even weirder employees.
+This game was born following an off-the-cuff comment from a friend who felt as though finding a new job was asking them to force a round peg into a square hole.
 
-### Scope Context
+It takes the form of a satirical examination of the modern job-seeking process, presented through a collection of rapid-fire puzzle mini-games. In these games, a customizable character attempts to get hired through an unexpectedly bizarre and fast-paced hiring process while uncovering weird corporate culture and even weirder employees.
 
-I was originally trying to make a very different game: a single level of an arcade snow/sandboarding game in the style of SSX. It turned out that doing relatively complex math while trying to learn Unity was not a smart idea. That and this video put me right off - https://www.youtube.com/watch?v=ko0OznC8Lws
-
-So, based on an off-the-cuff comment from a friend (who felt as though finding a new job was asking them to force a round peg into a square hole) this game was born.
+The goal of the game is to successfully complete enough minigames so that the player earns the job. Every time they win a minigame, they get closer to employment, and every time they lose, they get further away.
 
 See the video below for a 5-minute gameplay clip. Or play the game (link)
+
+By choosing to make the game a minigame collection, more gameplay could be produced from the implemented systems. This meant that the cycle of building, testing, and enhancing became much quicker after the initial features were implemented.
+
+By using Unity, not only could I present both 2D and 3D scenes together, but also utilise Unity's extensive Package collection to present more complex scenes using camera movement, post-processing and Unity's ScriptableObject system to separate data from code.
 
 <EMBED VIDEO>
 
@@ -20,9 +22,9 @@ See the video below for a 5-minute gameplay clip. Or play the game (link)
 
 - The game boots up (builds tested on WebGL and MacOS)
 
-![Screenshot 2024-06-30 at 01.37.30.jpg](https://prod-files-secure.s3.us-west-2.amazonaws.com/69592aa9-f64c-4d80-a229-a6ce643a4f0d/2c34c13d-01c7-4031-8dc5-5c4e4abe234c/Screenshot_2024-06-30_at_01.37.30.jpg)
+!https://prod-files-secure.s3.us-west-2.amazonaws.com/69592aa9-f64c-4d80-a229-a6ce643a4f0d/2c34c13d-01c7-4031-8dc5-5c4e4abe234c/Screenshot_2024-06-30_at_01.37.30.jpg
 
-![Screenshot 2024-06-30 at 03.07.25.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/69592aa9-f64c-4d80-a229-a6ce643a4f0d/69d9bbc4-37ee-4b6a-9393-ad156212b1e8/Screenshot_2024-06-30_at_03.07.25.png)
+!https://prod-files-secure.s3.us-west-2.amazonaws.com/69592aa9-f64c-4d80-a229-a6ce643a4f0d/69d9bbc4-37ee-4b6a-9393-ad156212b1e8/Screenshot_2024-06-30_at_03.07.25.png
 
 - Runs and is playable
 - Can be quit by holding ESC or pressing the Quit button in the start menu (Desktop only)
@@ -45,7 +47,7 @@ In addition to gameplay States, there are a number of transition states, menu st
 
 **2D Gameplay States:**
 
-- Intro Scenenes
+- Intro Scenes
     - 2DIntroName
     - 2DIntroProfile
 - Minigame Scenes
@@ -69,7 +71,7 @@ Where possible, I’ve tried to define GameObject behaviours using enums to enfo
 
 ### Methods of winning and losing
 
-After the player completes the tutorial scenes (Intro, 2DIntroName, 2DIntroProfile) where they are taught the following fundamental mechanics: 
+After the player completes the tutorial scenes (Intro, 2DIntroName, 2DIntroProfile) where they are taught the following fundamental mechanics:
 
 - Interacting with a dialogue system
 - While under-time pressure:
@@ -81,20 +83,19 @@ The player is then presented with an interview scene (Office1) in which the firs
 
 - Randomly ordered (based on which ones the player has not played - until all are played)
 - Have three internal states:
-    - isSuccess - when the player reaches the goal, e.g. When interviewing for the job of Couch Potatoe, arranges the lounge with a sofa and a TV.
+    - isSuccess - when the player reaches the goal, e.g. When interviewing for the job of Couch Potato, arranges the lounge with a sofa and a TV.
     - isFailure - when the minigame reaches a state where the player can not win. Either because the timer has expired, or the player selects a negative option. e.g. the alarm/bell when interviewing as a Bank Robber.
     - isNotSuccess - this is the default state. For each GameObject in the minigame, the player can return to isNotSuccess after being in isSuccess if they select an incorrect option after previously selecting a correct one.
 - At the end of a minigame - the player will either go up or down the leaderboard depending on whether the final state of the minigame was isSuccess or isFailure. The amount they go up on down the leaderboard is randomised within thresholds defined in DataManager.cs
-- If the player reaches the successThreshold - they win the game
-- If the player reaches the failureThreshold - they are presented with a game over screen, which then gives them the opportunity to play again.
-    - For each time the player reaches the failureThreshold (loses) their starting position is improved by (startPositionBuff * loseCount)
-        - This decreases the chance that they will lose (as quickly/at all) on the next run, and makes the game more weighted towards the player as it progresses.
+    - If the player reaches the successThreshold - they win the game
+    - If the player reaches the failureThreshold - they are presented with a (soft) game over screen, which then gives them the opportunity to play again.
+        - For each time the player reaches the failureThreshold (loses) their starting position is improved by (startPositionBuff * loseCount). This decreases the chance that they will lose (as quickly/at all) on the next run, and makes the game more weighted towards the player as it progresses.
 
 ### Libraries, Assets and other sources
 
-Below is a list of packages and assets used in the final game. 
+Below is a list of packages and assets used in the final game.
 
-The most notable is Dialogue System - which in hindsight, may have been less work (time and effort) to build a subset of its features myself. In the end, I wrote a wrapper to extend its functionality and made a number of small changes and bug fixes in the package itself to deliver the featurset. These can be found in:
+The most notable is Dialogue System - which in hindsight, may have been less work (time and effort) to build a subset of its features myself. In the end, I wrote a wrapper to extend its functionality and made a number of small changes and bug fixes in the package itself to deliver the featureset. These can be found in:
 
 - DialogueScriptWrapper.cs
 - HeneGames/DialogueSystem/Scripts/DialogueUI.cs
@@ -114,19 +115,19 @@ The most notable is Dialogue System - which in hindsight, may have been less wor
 
 **3D Assets**
 
-Office Pack Free - [https://assetstore.unity.com/packages/3d/props/interior/office-pack-free-258600](https://assetstore.unity.com/packages/3d/props/interior/office-pack-free-258600)
+Office Pack Free - https://assetstore.unity.com/packages/3d/props/interior/office-pack-free-258600
 
 **Images**
 
-Visitor/Leaver - [https://www.pngwing.com/en/free-png-puvyr/download?width=400](https://www.pngwing.com/en/free-png-puvyr/download?width=400)
+Visitor/Leaver - https://www.pngwing.com/en/free-png-puvyr/download?width=400
 
-Arrow - <a href='https://pngtree.com/freepng/rising-arrows_5990754.html'>png image from pngtree.com/</a>
+Arrow - <a href='https://pngtree.com/freepng/rising-arrows_5990754.html'>png image from [pngtree.com/](http://pngtree.com/)</a>
 
 Crumpled Paper Texture: Photo by [SJ Objio](https://unsplash.com/@sjobjio?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/white-and-gray-floral-textile-XFWiZTa2Ub0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
 
 Ripped Paper Texture: PngTree: https://pngtree.com/freepng/stylish-ripped-torn-paper-texture-background-transparent_8797583.html
 
-Old Fasioned Pen Texture — CleanPNG: https://www.cleanpng.com/png-fountain-pen-writing-instrument-ink-pen-red-and-go-8088863/preview.html
+Old Fashioned Pen Texture — CleanPNG: https://www.cleanpng.com/png-fountain-pen-writing-instrument-ink-pen-red-and-go-8088863/preview.html
 
 2D border - <a href='https://pngtree.com/freepng/shadow-decorative-border-black-overlay-rectangle-rounded-corner_7597173.html'>png image from [pngtree.com/](http://pngtree.com/)</a>
 
@@ -154,7 +155,7 @@ Jazz loop - Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_so
 
 Smooth R&B - Music by <a href="https://pixabay.com/users/beatmekanik-14584889/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Johnathon Horner</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Pixabay</a>
 
-Boo - Music by <a href="https://pixabay.com/users/beatmekanik-14584889/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Johnathon Horner</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Pixabay</a> 
+Boo - Music by <a href="https://pixabay.com/users/beatmekanik-14584889/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Johnathon Horner</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Pixabay</a>
 
 **Sound Effects**
 
@@ -166,65 +167,39 @@ Where relevant links to relevant documentation, forum posts, tutorials, and guid
 
 ### Complexity and distinctness
 
-- To differentiate this game from the problems in this course, I have ensured that both its visual style:
-    - primitive shapes,
-    - highly reflective materials,
-    - high contrast
-    - hard shadows
-    - Both 2D and 3D
-- … as well as its mechanics and logic:
-    - Player/Game interaction and storytelling through a Dialogue system
-    - Time-based, rapid-fire mini/microgames
-    - Higher UI complexity
-    - Systems-based design to enable easier creation of content (after systems were implemented)
-    - Stacking of systems to give depth to gameplay e.g.
-        - DialogueSystem is triggered by collision
-            - On a specific Dialogue Event is fired to SceneManagerCustom to Additively Load a minigame
-                - TimerHelper starts a timer
-                - GameObjects that the user can interact with are instantiated into a parent GameObject (i.e. a ScrollView - ScrollViewWriterReader), which then instantiates which GameObjects (which are styled) which each pull their content Image, Raw Image or Text from a Scriptable Object.
-                    - These ScriptableObjects also hold the values selected by the player on the child GameObject as well as any other relevant metadata
-                        - The parent GameObjects send an event to MinigameHandler every time the player makes a selection to keep state of whether the player has reached the goal for the mimigame.
-                            - If the Player isSuccess(full) we force the TimerHelper to end
-                                - Reset the values stored on the parent objects during the minigame (as they are no longer needed)
-                                - Improve the player’s overall position/score
-                                - Additively load the Leaderboard
-                                - Async unload the minigame scene
-                                    - Then, additional logic occurs based on the player’s macro progress
-                            - If the result isFailure
-                                - Reset values
-                                - Decrease position/score
-                                - Additively load the Leaderboard
-                                - Async unload the minigame scene
-                                    - Then, additional logic occurs based on the player’s macro progress
-- I hope this gives an impression of the underlying complexity involved in this Final Project.
-    - The remainder of this ReadMe describes the complexity of the systems built, their purpose and the rationale for doing so.
+To differentiate this game from the problems in this course, I have ensured that it is both stylistically, and mechanically distinct.
 
-## Technical Implementation Details
+**Style**
 
-Not included below are minor edits to included packages, which are largely contained to the Dialogue Manager.
+- Primitive shapes
+- Highly reflective materials
+- High contrast
+- Hard shadows
+- Both 2D and 3D scenes
 
-1. Prefabs
-    
-    — Trans Canvas
-    
-    — Parent Image
-    
-    — Title
-    
-    — Timer Display
-    
-    Use Parent Image as Origin for Instantiated 2D GameObjects - GrandParent
-    
-    Initiate the Parent Inside the GrandParent - used for Position
-    
-    Initiate the Child Inside the Parent - largely used for styling and container for content
-    
-    Instantiate content inside Child from Array in ScriptableObject
-    
-2. ScriptableObjects - output to Resources for access
-3. “Manager” Classes
-4. Wrappers
-5. Handlers and Helpers
-   - EventHandler oversees events created by the pointer. The exception to this are the menu screens, where due to their single use nature, it was more effective to use Event Triggers in the Unity Inspeector
-7. Overrides
-8. Readers/Writers
+**Mechanics**
+
+- Player/Game interaction and storytelling through a Dialogue system
+- Time-based, rapid-fire minigames
+- Scroll/Drag events within GUI
+- Systems-based design to enable easier creation of content (after systems were implemented)
+- Stacking of systems to give depth to gameplay, led to inherent complexity during development. To demonstrate the complexity during runtime, here are the Events which fire during any mimigame
+1. DialogueSystem is triggered by collision
+2. On a specific Dialogue Sentence is fired to SceneManagerCustom to Additively Load a minigame
+3. TimerHelper starts a timer
+4. GameObjects that the user can interact with are instantiated into a parent GameObject (i.e. a ScrollView - ScrollViewWriterReader), 
+    1. which then instantiates which GameObjects (which are styled) 
+        1. which each pull their content Image, Raw Image or Text from a Scriptable Object.
+5. These ScriptableObjects also hold the values selected by the player on the child GameObject as well as any other relevant metadata
+6. The parent GameObjects send an event to MinigameHandler every time the player makes a selection to keep the state of whether the player has reached the goal for the minigame
+    1. If the Player isSuccess(full) we force the TimerHelper to end,
+        1. Reset the values stored on the parent objects during the minigame (as they are no longer needed)
+            1. Improve the player’s overall position/score
+    2. If the result isFailure
+        1. Reset values
+            1. Decrease position/score
+7. Additively load the Leaderboard
+8. Async unload the minigame scene
+9. Then, additional logic occurs based on the player’s macro progress
+
+I hope this gives an impression of the underlying complexity involved in this Final Project.
