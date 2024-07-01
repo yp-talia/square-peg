@@ -45872,7 +45872,7 @@ MonoBehaviour:
       type: 2}
     sentence: "I forgot to mention. \n\nNew HR Policy means that I'll be directly
       comparing you to all other candidates... in real time."
-    skipDelayTime: 6
+    skipDelayTime: 10
     disableInput: 1
     sentenceSound: {fileID: 0}
     sentenceEvent:
