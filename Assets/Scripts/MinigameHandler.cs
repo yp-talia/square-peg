@@ -88,6 +88,10 @@ public class MinigameHandler : MonoBehaviour
             completed = true;
             dataManager.previousPosition = dataManager.currentPosition;
             dataManager.currentPosition -= Random.Range(dataManager.positionsGainableMin, dataManager.positionsGainableMax);
+            if (dataManager.currentPosition < 1)
+            {
+                dataManager.currentPosition = 1;
+            }
 
             if (dataManager.debugOnInfo == true || dataManager.debugOnInfoPriority == true)
             {
