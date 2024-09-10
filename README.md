@@ -166,43 +166,4 @@ CountDown - Sound Effect by <a href="https://pixabay.com/users/patw64-16142356/?
 
 <a href="https://www.behindthename.com/random/?gender=both&number=1&sets=5&surname=&randomsurname=yes&all=yes">Random name generator</a>
 
-Where relevant links to relevant documentation, forum posts, tutorials, and guides are included within code comments.
-
-### Complexity and distinctness
-
-To differentiate this game from the problems in this course, I have ensured that it is both stylistically, and mechanically distinct.
-
-**Style**
-
-- Primitive shapes
-- Highly reflective materials
-- High contrast
-- Hard shadows
-- Both 2D and 3D scenes
-
-**Mechanics**
-
-- Player/Game interaction and storytelling through a Dialogue system
-- Time-based, rapid-fire minigames
-- Scroll/Drag events within GUI
-- Systems-based design to enable easier creation of content (after systems were implemented)
-- Stacking of systems to give depth to gameplay, led to inherent complexity during development. To demonstrate the complexity during runtime, here are the Events which fire during any mimigame
-1. DialogueSystem is triggered by collision
-2. On a specific Dialogue Sentence is fired to SceneManagerCustom to Additively Load a minigame
-3. TimerHelper starts a timer
-4. GameObjects that the user can interact with are instantiated into a parent GameObject (i.e. a ScrollView - ScrollViewWriterReader), 
-    1. which then instantiates which GameObjects (which are styled) 
-        1. which each pull their content Image, Raw Image or Text from a Scriptable Object.
-5. These ScriptableObjects also hold the values selected by the player on the child GameObject as well as any other relevant metadata
-6. The parent GameObjects send an event to MinigameHandler every time the player makes a selection to keep the state of whether the player has reached the goal for the minigame
-    1. If the Player isSuccess(full) we force the TimerHelper to end,
-        1. Reset the values stored on the parent objects during the minigame (as they are no longer needed)
-            1. Improve the player’s overall position/score
-    2. If the result isFailure
-        1. Reset values
-            1. Decrease position/score
-7. Additively load the Leaderboard
-8. Async unload the minigame scene
-9. Then, additional logic occurs based on the player’s macro progress
-
-I hope this gives an impression of the underlying complexity involved in this Final Project.
+Where relevant, links to relevant documentation, forum posts, tutorials, and guides are included within code comments.
