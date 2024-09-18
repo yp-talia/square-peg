@@ -1,4 +1,9 @@
+# Unity build folders
 [Bb]uild*/
+WebGL Builds/
+connectwebgl/
+
+# Other folders
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -25,6 +30,12 @@ MemoryCaptures/
 *.mdb.meta
 *.opendb.meta
 *.VC.db.meta
+
+# Assets (re-importable)
+Assets/Plugins/Demigiant/
+Assets/TextMesh Pro/
+Assets/HeneGames/
+Assets/nappin/
 
 # Visual Studio cache files
 [Vv]isual[Ss]tudio/.vs/
