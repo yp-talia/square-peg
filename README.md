@@ -1,169 +1,92 @@
-# ReadMe - Square Peg: A completely ridiculous commentary on modern job hunting and corporate culture... or how I gave it all up to go and join the circus.
+# Square Peg
 
-## Scope
+**[Square Peg](https://play.unity.com/en/games/aaa0a3fd-04e7-4b23-8f31-fb5911b3560c/square-peg)** is a satirical puzzle game that pokes fun at the bizarre and sometimes nonsensical world of modern job hunting. Inspired by mini-game collections like *Mario Party* and *WarioWare*, with a dose of absurdity from *Job Simulator* and *Papers, Please*, **Square Peg** takes players through a series of weird hiring processes.
 
-This game was born following an off-the-cuff comment from a friend who felt as though finding a new job was asking them to force a round peg into a square hole.
+**Can you navigate the chaos and land the job, or will you be stuck at the bottom of the corporate ladder?**
 
-It takes the form of a satirical examination of the modern job-seeking process, presented through a collection of rapid-fire puzzle mini-games. In these games, a customizable character attempts to get hired through an unexpectedly bizarre and fast-paced hiring process while uncovering weird corporate culture and even weirder employees.
+- Watch the gameplay demo here: [Gameplay Video](https://www.youtube.com/watch?v=1KPDW7uwbrE)
+- Play the game here: [Play Square Peg on Unity Play](https://play.unity.com/en/games/aaa0a3fd-04e7-4b23-8f31-fb5911b3560c/square-peg)
 
-The goal of the game is to successfully complete enough minigames so that the player earns the job. Every time they win a minigame, they get closer to employment, and every time they lose, they get further away.
+## Gameplay Overview
 
-See the video below for a 5-minute gameplay clip. Or play the game (link)
+Players take on the role of a customizable character navigating a bizarre hiring process filled with mini-games that represent different job tasks. Success in these mini-games brings the player closer to employment, while failure pushes them further away.
 
-By choosing to make the game a minigame collection, more gameplay could be produced from the implemented systems. This meant that the cycle of building, testing, and enhancing became much quicker after the initial features were implemented.
+- **Goal**: Complete enough mini-games successfully to secure a job.
+- **Failure**: Falling behind in the hiring process results in setbacks, and eventually being shown the door.
 
-By using Unity, not only could I present both 2D and 3D scenes together, but also utilise Unity's extensive Package collection to present more complex scenes using camera movement, post-processing and Unity's ScriptableObject system to separate data from code.
+## Core Mechanics
 
-<EMBED VIDEO>
+- **Mini-Games**: Players must navigate a variety of mini-games that test their reaction time, decision-making, and multitasking abilities.
+- **Leaderboard System**: The player's position on the leaderboard fluctuates based on their performance in each mini-game. Climbing to the top means success, while falling to the bottom means game over.
+- **Adaptive Difficulty**: If a player struggles with an interview, their next attempt will be slightly easier, ensuring they stay engaged and motivated. This dynamic difficulty system helps balance challenge and enjoyment.
 
-## Meeting CS50 Games Requirements
+## Development and Design
 
-### Complete experience
+**Square Peg** is designed as a prototype, with placeholder art, rough edges, and room for iteration. The goal is to test the core gameplay mechanics and satirical tone. The current art, animations, and assets are temporary, with plans to refine and expand the game in future iterations.
 
-- The game boots up (builds tested on WebGL and MacOS)
+After completing the tutorial scenes/screens, players progress to a series of interview-style mini-games. Each mini-game tests the player’s ability to complete tasks within time constraints, with win/loss conditions dynamically affecting their position on the leaderboard.
 
-![Screenshot 2024-06-30 at 01 37 30](https://github.com/yp-talia/cs50g/assets/94854224/f9975422-e0f6-41cb-97ff-e36c7032a136)
-<img width="1261" alt="Screenshot 2024-06-30 at 03 07 25" src="https://github.com/yp-talia/cs50g/assets/94854224/404d2bdd-1985-45a9-a089-9845e0753582">
+Each mini-game is a state system with three key states:
+- **Success**: The player completes the task successfully, e.g., arranging a lounge for the Couch Potato job. This improves their position on the “job seeker” leaderboard.
+- **Failure**: The player cannot complete the task within the given constraints, leading to a failure state. This reduces their position on the “job seeker” leaderboard.
+- **NotSuccess**: The default state until the player achieves success or failure.
 
-- Runs and is playable
-- Can be quit by holding ESC or pressing the Quit button in the start menu (Desktop only)
+The mini-games are randomized to maintain variety, and the difficulty dynamically adjusts based on the player's performance, offering replayability and a fresh experience with each playthrough.
 
-### Has at least three Game States
+## Rendering and Technical Implementation
 
-To accomplish the look of a 2D overlay on a 3D world, many scenes are additively loaded to the Active Scene, this means that States are Stacked up to three levels deep.
+**Square Peg** incorporates both 2D and 3D elements to create a visually engaging experience. The **Universal Render Pipeline (URP)** allows for detailed lighting and post-processing effects, while Unity’s built-in feature-set made it easy to prototype quickly.
 
-In addition to gameplay States, there are a number of transition states, menu states, and Game End/Start States to give the player a seamless experience. These can be seen in Assets/Scenes
+### Game States
+- **Menu States**: StartMenu, MainMenu
+- **3D Gameplay States**: Intro, Office
+- **2D Gameplay States**: Intro Scenes, Minigame Scenes
+- **Leaderboard State**: Leaderboard
+- **Transition States**: IntroTransition, Win, Lose
 
-**Menu States:**
+## Harvard CS50 Games Development Requirements
 
-- StartMenu
-- MainMenu
+The game meets the CS50 Games requirements, including:
+- A playable experience that runs on build (WebGL and macOS).
+- Multiple game states, with gameplay transitioning seamlessly between menus, levels, and outcomes based on player interaction.
+- A control to quit the game (desktop versions) using ESC or the Quit button.
 
-**3D Gameplay States:**
+## Packages, Libraries, and Assets
 
-- Intro
-- Office1
+**Square Peg** uses packages and assets to increase the speed of development.
 
-**2D Gameplay States:**
+### Key Packages and Libraries
+- **[Dialogue System](https://assetstore.unity.com/packages/tools/gui/dialogue-system-248969#reviews)**: Custom system for player interaction, extended with custom scripts.
+- **[DotTween](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676)**: Used for smooth in-game animations and UI transitions.
+- **[Probuilder](https://docs.unity3d.com/Packages/com.unity.probuilder@5.2/manual/index.html)**: For rapid prototyping of 3D models.
 
-- Intro Scenes
-    - 2DIntroName
-    - 2DIntroProfile
-- Minigame Scenes
-    - Dinner
-    - Lounge
-    - Safe
-    - Zoo
-    - Podium
+### 3D Assets
+- **[Office Pack Free](https://assetstore.unity.com/packages/3d/props/interior/office-pack-free-258600)**: Provides 3D models for office environments.
 
-**Leaderboard State**
+### Audio and Sound Effects
+- **[Time's Ticking](https://pixabay.com/users/miyagisama-491779/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=8819)** - Miyagisama
+- **[Old Vinyl Crackle](https://pixabay.com/users/whitenoisesleepers-42647563/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=194006)** - Jens-Kristian Ekholm
+- **[Jazz Loop and Boo & Laugh](https://pixabay.com/sound-effects/jazz-loop-7163/)** - Pixabay
+- **[Smooth R&B and Boo](https://pixabay.com/users/beatmekanik-14584889/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474)** - Johnathon Horner
+- **[CountDown](https://pixabay.com/users/patw64-16142356/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=142456)** - Patrick Williams
 
-- Leaderboard
+### 2D Assets and Textures
+- **[Crumpled Paper Texture](https://unsplash.com/photos/white-and-gray-floral-textile-XFWiZTa2Ub0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)**: From Unsplash, used for UI backgrounds.
+- **[Ripped Paper Texture](https://pngtree.com/freepng/stylish-ripped-torn-paper-texture-background-transparent_8797583.html)**: From PngTree, for UI and decorative elements.
+- **[Emoji Images](https://emoji.aranja.com/)**: Used for various in-game icons.
+- **[Keyboard Keys](https://www.vecteezy.com/png/9383884-laptop-device-clipart-design-illustration)**: Used for interactive prompts.
+- **[Various PNG Assets](https://www.pngwing.com/)**: Sourced from PNGWing, used for decorative elements and UI design.
 
-**Transition States:**
+## Playtesting and Feedback
 
-- IntroTransition
-- Win
-- Lose
+**Square Peg** is only a prototype, with placeholder art, music, and UI.
 
-Where possible, I’ve tried to define GameObject behaviours using enums to enforce specific states such as Select and Submit States to Gameplay objects and isSuccess(full), isNotSuccess(full), isFailure when needing to aggregate using actions towards a larger goal. These states, for example, can be seen in ScrollViewWriterReader.cs
+The current version features a limited selection of mini-games and interview scenes, but with your feedback, it can become a polished and engaging experience.
 
-### Methods of winning and losing
+If you’ve tried **Square Peg** and have thoughts on what you enjoyed or areas for improvement, I’d love to hear your feedback!
 
-After the player completes the tutorial scenes (Intro, 2DIntroName, 2DIntroProfile) where they are taught the following fundamental mechanics:
+Message me on [LinkedIn](https://www.linkedin.com/in/productmanageruk/), or share your thoughts on this [three-question form](https://docs.google.com/forms/d/e/1FAIpQLSfrlpRjJSHm1uIK9ydrLCnfdEB9OsDDcxMiK14vAOmT_9OJfg/viewform?usp=sf_link).
 
-- Interacting with a dialogue system
-- While under-time pressure:
-    - Pointing at on-screen objects
-    - Dragging to make selections as part of a larger puzzle
-    - Submitting a selection (if there is only one to make)
+## Acknowledgments
 
-The player is then presented with an interview scene (Office1) in which the first success/fail minigame takes place. These minigames are:
-
-- Randomly ordered (based on which ones the player has not played - until all are played)
-- Have three internal states:
-    - isSuccess - when the player reaches the goal, e.g. When interviewing for the job of Couch Potato, arranges the lounge with a sofa and a TV.
-    - isFailure - when the minigame reaches a state where the player can not win. Either because the timer has expired, or the player selects a negative option. e.g. the alarm/bell when interviewing as a Bank Robber.
-    - isNotSuccess - this is the default state. For each GameObject in the minigame, the player can return to isNotSuccess after being in isSuccess if they select an incorrect option after previously selecting a correct one.
-- At the end of a minigame - the player will either go up or down the leaderboard depending on whether the final state of the minigame was isSuccess or isFailure. The amount they go up on down the leaderboard is randomised within thresholds defined in DataManager.cs
-    - If the player reaches the successThreshold - they win the game
-    - If the player reaches the failureThreshold - they are presented with a (soft) game over screen, which then gives them the opportunity to play again.
-        - For each time the player reaches the failureThreshold (loses) their starting position is improved by (startPositionBuff * loseCount). This decreases the chance that they will lose (as quickly/at all) on the next run, and makes the game more weighted towards the player as it progresses.
-
-### Libraries, Assets and other sources
-
-Below is a list of packages and assets used in the final game.
-
-The most notable is Dialogue System - which in hindsight, may have been less work (time and effort) to build a subset of its features myself. In the end, I wrote a wrapper to extend its functionality and made a number of small changes and bug fixes in the package itself to deliver the featureset. These can be found in:
-
-- DialogueScriptWrapper.cs
-- HeneGames/DialogueSystem/Scripts/DialogueUI.cs
-
-**Packages**
-
-- WebGL Publisher - https://docs.unity3d.com/Packages/com.unity.connect.share@4.2/manual/index.html / https://docs.unity3d.com/Manual/webgl.html
-- URP - https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@14.0/manual/index.html
-- Post Processing - https://docs.unity3d.com/Packages/com.unity.postprocessing@3.4/manual/index.html
-- Dialogue System - https://assetstore.unity.com/packages/tools/gui/dialogue-system-248969#reviews
-- Probuilder - https://docs.unity3d.com/Packages/com.unity.probuilder@5.2/manual/index.html
-- Unity UI - https://docs.unity3d.com/Packages/com.unity.ugui@3.0/manual/index.html
-- Timeline - https://docs.unity3d.com/Packages/com.unity.timeline@1.8/manual/index.html
-- Cinemaker - https://docs.unity3d.com/Packages/com.unity.cinemachine@2.10/manual/index.html
-- 2D Sprite - https://docs.unity3d.com/Packages/com.unity.2d.sprite@1.0/manual/index.html
-- DotTween - https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676
-
-**3D Assets**
-
-Office Pack Free - https://assetstore.unity.com/packages/3d/props/interior/office-pack-free-258600
-
-**Images**
-
-Visitor/Leaver - https://www.pngwing.com/en/free-png-puvyr/download?width=400
-
-Arrow - <a href='https://pngtree.com/freepng/rising-arrows_5990754.html'>png image from [pngtree.com/](http://pngtree.com/)</a>
-
-Crumpled Paper Texture: Photo by [SJ Objio](https://unsplash.com/@sjobjio?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/white-and-gray-floral-textile-XFWiZTa2Ub0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
-
-Ripped Paper Texture: PngTree: https://pngtree.com/freepng/stylish-ripped-torn-paper-texture-background-transparent_8797583.html
-
-Old Fashioned Pen Texture — CleanPNG: https://www.cleanpng.com/png-fountain-pen-writing-instrument-ink-pen-red-and-go-8088863/preview.html
-
-2D border - <a href='https://pngtree.com/freepng/shadow-decorative-border-black-overlay-rectangle-rounded-corner_7597173.html'>png image from [pngtree.com/](http://pngtree.com/)</a>
-
-High Quality Paper Texture: Photo by [Augustine Wong](https://unsplash.com/@augustinewong?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/white-wall-paint-with-black-line-3Om4DHcaAc0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
-
-Hand Cursor - https://uxwing.com/mouse-hand-cursor-color-icon/
-
-Emoji Images, for the following- https://emoji.aranja.com/
-
-Tabletop - https://www.pngwing.com/en/free-png-zlpvj/download?height=400
-
-Animal pen - https://www.pngwing.com/en/free-png-zrjlr/download?width=300
-
-Rug - https://www.pngwing.com/en/free-png-xtczw/download?width=200
-
-Keyboard Keys - https://www.vecteezy.com/png/9383884-laptop-device-clipart-design-illustration
-
-**Music**
-
-Miyagisama - Time's Ticking (Cinematic: Energetic, Urgent) - Music by <a href="https://pixabay.com/users/miyagisama-491779/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=8819">Miyagisama</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=8819">Pixabay</a>
-
-Old Vinyl Crackle- Sound Effect by <a href="https://pixabay.com/users/whitenoisesleepers-42647563/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=194006">Jens-Kristian Ekholm</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=194006">Pixabay</a>
-
-Jazz loop - Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=7163">Pixabay</a>
-
-Smooth R&B - Music by <a href="https://pixabay.com/users/beatmekanik-14584889/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Johnathon Horner</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Pixabay</a>
-
-Boo - Music by <a href="https://pixabay.com/users/beatmekanik-14584889/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Johnathon Horner</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=214474">Pixabay</a>
-
-**Sound Effects**
-
-Boo and Laugh - Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=7060">Pixabay</a>
-
-CountDown - Sound Effect by <a href="https://pixabay.com/users/patw64-16142356/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=142456">Patrick Williams</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=142456">Pixabay</a>
-
-**Other**
-
-<a href="https://www.behindthename.com/random/?gender=both&number=1&sets=5&surname=&randomsurname=yes&all=yes">Random name generator</a>
-
-Where relevant, links to relevant documentation, forum posts, tutorials, and guides are included within code comments.
+Links to relevant documentation and tutorials are included within code comments where appropriate.
