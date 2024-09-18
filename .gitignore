@@ -61,3 +61,6 @@ crashlytics-build.properties
 
 # Temporary auto-save files
 *.autosave
+
+# DS Store
+*.DS_Store
