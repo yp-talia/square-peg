@@ -7,7 +7,7 @@ public class DataManager : MonoBehaviour
     [Header ("Debug Levels")]    
     public bool debugOnWarn = true;
     public bool debugOnInfo = true;
-    public bool debugOnInfoPriority = true; // Adding this in because debugOnInfo is really noisy
+    public bool debugOnInfoPriority = false; // Adding this in because debugOnInfo is really noisy
 
     [Header ("Gameplay Contstants")]
 

@@ -35,7 +35,7 @@ public class CursorManager : MonoBehaviour
         Cursor.SetCursor(cursorTexture1, cursorsHotSpot, cursorMode);
         if (dataManager.debugOnInfo == true)
         {
-            Debug.Log("Cursor changed to texture 1");
+            Debug.Log("Cursor changed to texture 1. cursorsHotSpot =" + cursorsHotSpot);
         }
     }
     public void SetTexture2()
@@ -43,7 +43,7 @@ public class CursorManager : MonoBehaviour
         Cursor.SetCursor(cursorTexture2, cursorsHotSpot, cursorMode);
         if (dataManager.debugOnInfo == true)
         {
-            Debug.Log("Cursor changed to texture 2");
+            Debug.Log("Cursor changed to texture 2. cursorsHotSpot =" + cursorsHotSpot);
         }
     }
 }
