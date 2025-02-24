@@ -5,7 +5,7 @@
 **Can you navigate the chaos and land the job, or will you be stuck at the bottom of the corporate ladder?**
 
 - Watch the gameplay demo here: [Gameplay Video](https://www.youtube.com/watch?v=1KPDW7uwbrE)
-- Play the game here: [Play Square Peg on Unity Play](https://play.unity.com/en/games/aaa0a3fd-04e7-4b23-8f31-fb5911b3560c/square-peg)
+- Play the game here: [Play Square Peg on Unity Play](https://play.unity.com/en/games/2f5fa3c3-97c1-458d-a1e0-15bd20128fc7/square-peg)
 
 ## Gameplay Overview
 
